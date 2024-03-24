@@ -35,12 +35,13 @@ jobs:
 
       - name: Build
         run: |
+          npm install -g expo-cli
           npm install
-          REACT_APP_ENV=${{ steps.branch-name.outputs.base_ref_branch }} npm run build
+          REACT_APP_ENV=${{ steps.branch-name.outputs.base_ref_branch }} npx expo export --platform web
 
       - name: upload-folder
         uses: google-github-actions/upload-cloud-storage@v1
         with:
-          path: 'build/'
+          path: 'dist/'
           destination: ${{ env.GCP_BUCKET }}
           parent: false
