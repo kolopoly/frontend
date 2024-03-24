@@ -1,0 +1,46 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 20
+
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v7
+
+      - name: Auth with credentials
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_UPLOAD_BUCKET_CRED }}
+
+      - name: Configure data
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          echo "GCP_BUCKET=${{ vars.GCP_BUCKET }}" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          npm install
+          REACT_APP_ENV=${{ steps.branch-name.outputs.base_ref_branch }} npm run build
+
+      - name: upload-folder
+        uses: google-github-actions/upload-cloud-storage@v1
+        with:
+          path: 'build/'
+          destination: ${{ env.GCP_BUCKET }}
+          parent: false
