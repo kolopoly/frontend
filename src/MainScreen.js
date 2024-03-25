@@ -1,20 +1,44 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, Text, View, Dimensions, Button} from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    ImageBackground,
+    Image
+} from 'react-native';
 
 const localImage = require('./../assets/MainBackground.jpeg');
-const { width, height } = Dimensions.get('window');
-const image = { uri: "https://docs.expo.dev/static/images/tutorial/splash.png" };
+const gifImage = require('./../assets/giphy.gif');
 
 const MainScreen = () => (
     <View style={styles.container}>
-        <ImageBackground source={localImage} style={styles.image}>
-            <div style={styles.bcontainer}>
-                <div style={styles.buttons}>
-                    <button style={styles.button}>Button 1</button>
-                    <button style={styles.button}>Button 2</button>
-                    <button style={styles.button}>Button 3</button>
-                </div>
-            </div>
+        <ImageBackground
+            source={localImage}
+            style={styles.image}
+            blurRadius={5}
+            resizeMode="stretch"
+        >
+            <View style={styles.contentContainer}>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Button 1</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Button 2</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>Button 3</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.gifContainer}>
+                    <Image
+                        source={gifImage}
+                        style={styles.gif}
+                        resizeMode="contain"
+                    />
+                </View>
+            </View>
         </ImageBackground>
     </View>
 );
@@ -22,7 +46,6 @@ const MainScreen = () => (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        flexDirection: 'column',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
@@ -33,37 +56,44 @@ const styles = StyleSheet.create({
         flex: 1,
         resizeMode: 'cover',
         justifyContent: 'center',
-        width: "100%",
-        height: "100%",
+        width: '100%',
+        height: '100%',
     },
-    text: {
-        color: 'white',
-        fontSize: 42,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        backgroundColor: '#000000a0',
+    contentContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly', // Adjusted for even spacing
     },
-    bcontainer: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    buttons: {
-        display: "flex",
-        flexDirection: "column",
+    buttonsContainer: {
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: '',
+        maxWidth: '30%', // Adjust max width if needed to move buttons more to the left
     },
     button: {
-        margin: "5px",
-        padding: "15px 30px", // Adjusted padding to make the buttons bigger
-        fontSize: 60, // Adjusted font size to make the buttons bigger
+        justifyContent: "center",
         backgroundColor: "#007bff",
-        color: "white",
-        border: "none",
-        borderRadius: "20px",
-        cursor: "pointer",
+        borderRadius: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 45,
+        marginVertical: 10,
+    },
+    buttonText: {
+        fontSize: 20,
+        color: "#fff",
+        textAlign: 'center',
+    },
+    gifContainer: {
+        flex: 0.4,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    gif: {
+        width: '50%',
+        height: undefined,
+        aspectRatio: 1,
     }
 });
-
-
 
 export default MainScreen;
