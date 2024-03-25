@@ -18,6 +18,18 @@
     "react-native": "0.73.5",
     "react-native-web": "~0.19.6"
   },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
