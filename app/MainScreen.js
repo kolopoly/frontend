@@ -7,9 +7,8 @@ import {
     ImageBackground,
     Image
 } from 'react-native';
-
-const localImage = require('./../assets/MainBackground.jpeg');
-const gifImage = require('./../assets/giphy.gif');
+const localImage = require('../assets/MainBackground.jpeg');
+const gifImage = require('../assets/giphy.gif');
 
 const MainScreen = () => (
     <View style={styles.container}>
@@ -21,14 +20,14 @@ const MainScreen = () => (
         >
             <View style={styles.contentContainer}>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Button 1</Text>
+                    <TouchableOpacity style={styles.button} href="/games">
+                        <Text style={styles.buttonText}>Games</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Button 2</Text>
+                    <TouchableOpacity style={styles.button} href="/builder">
+                        <Text style={styles.buttonText}>Builder</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Button 3</Text>
+                    <TouchableOpacity style={styles.button} href="/about">
+                        <Text style={styles.buttonText}>About</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.gifContainer}>
