@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, StyleSheet} from "react-native";
-import RingField from './Test';
+import GameRing from './GameRing';
 
 
 
-class Builder extends React.Component {
+class GameScreen extends React.Component {
 
     handleSectorClick = (sectorIndex) => {
         console.log(`Clicked sector ${sectorIndex + 1}`);
@@ -15,7 +15,7 @@ class Builder extends React.Component {
             <View style={styles.container}>
                 <View style={styles.leftContainer}></View>
                 <View style={styles.rightContainer}>
-                    <RingField radius={350} numSectors={15} onClick={this.handleSectorClick} playersNumber={4} playersPositions={[0, 0, 0, 0]} sectorNames={['Ulica Huilica 228 1347 sdas', 'Andrew', 'Denis', 'AlSkvar', 'Anton']} />
+                    <GameRing radius={350} numSectors={15} onClick={this.handleSectorClick} playersNumber={4} playersPositions={[0, 0, 0, 0]} sectorNames={['Ulica Huilica 228 1347 sdas', 'Andrew', 'Denis', 'AlSkvar', 'Anton']} />
                 </View>
             </View>
         );
@@ -47,4 +47,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Builder;
+export default GameScreen;

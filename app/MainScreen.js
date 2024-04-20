@@ -20,7 +20,7 @@ const MainScreen = () => (
         >
             <View style={styles.contentContainer}>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.button} href="/games">
+                    <TouchableOpacity style={styles.button} href="/game">
                         <Text style={styles.buttonText}>Games</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} href="/builder">
