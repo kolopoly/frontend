@@ -1,17 +1,27 @@
-import React from "react";
+import React from 'react';
 import {View, StyleSheet} from "react-native";
-import Canvas from "./Canvas";
+import RingField from './Test';
 
-const Builder = () => (
 
-    <View style={styles.container}>
-        <View style={styles.leftContainer}></View>
-        <View style={styles.rightContainer}>
-            <Canvas/>
-        </View>
-    </View>
 
-);
+class Builder extends React.Component {
+
+    handleSectorClick = (sectorIndex) => {
+        console.log(`Clicked sector ${sectorIndex + 1}`);
+    };
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <View style={styles.leftContainer}></View>
+                <View style={styles.rightContainer}>
+                <RingField radius={350} numSectors={20} onClick={this.handleSectorClick} />
+                </View>
+            </View>
+        );
+    }
+}
+
 
 const styles = StyleSheet.create({
     container: {
@@ -25,6 +35,8 @@ const styles = StyleSheet.create({
     rightContainer: {
         flex: 1,
         backgroundColor: "white", // Example background color
+        resizeMode: 'cover',
+        justifyContent: 'center',
     },
     image: {
         flex: 1,
