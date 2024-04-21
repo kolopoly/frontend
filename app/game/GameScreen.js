@@ -6,7 +6,8 @@ import {getGameId, getNickname, setGameId} from "../storage";
 
 const useFetchRule = async (ruleId) => {
     try {
-        const response = await fetch(`/get_rule/${ruleId}`);
+        const response = await fetch(`http://localhost:8000/get_rule/${ruleId}`);
+        console.log(response)
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -14,12 +15,11 @@ const useFetchRule = async (ruleId) => {
         return data
     } catch (error) {
         return null
-    } finally {
-        return null
     }
 };
 
 const parserJson = (ruleData) => {
+    console.log(ruleData)
     const { field_amount, fields, streets } = ruleData;
     const fieldNames = fields.map(field => field.name);
     const streetIds = fields.map(field => field.street_id);
@@ -56,12 +56,12 @@ class GameScreen extends React.Component {
         this.setState({ game_id: text });
     };
 
-    startGame = () => {
+    startGame = async () => {
         console.log("Game ID:", this.state.game_id);
-        const ruleData = useFetchRule(1);
+        const ruleData = await useFetchRule(1);
         const result = parserJson(ruleData);
         this.setState({
-            game_id : this.state.game_id,
+            game_id: this.state.game_id,
             isGameStarted: true,
             field_data: ruleData,
             field_number: result.field_amount,
@@ -92,7 +92,7 @@ class GameScreen extends React.Component {
     renderGameContent = () => {
         let game_id = getGameId();
 
-        if(game_id == null){
+        if(game_id != null){
             this.setState({ game_id: game_id });
             this.setState({ isGameStarted: true });
         } else {
