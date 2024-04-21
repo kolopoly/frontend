@@ -1,14 +1,51 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, TextInput, Button } from "react-native";
 import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
+
+const useFetchRule = async (ruleId) => {
+    try {
+        const response = await fetch(`/get_rule/${ruleId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data
+    } catch (error) {
+        return null
+    } finally {
+        return null
+    }
+};
+
+const parserJson = (ruleData) => {
+    const { field_amount, fields, streets } = ruleData;
+    const fieldNames = fields.map(field => field.name);
+    const streetIds = fields.map(field => field.street_id);
+    const colors = Object.values(streets).map(street => street.color);
+    let streetColors = []
+    for (let i = 0; i < field_amount; i++){
+        if(streetIds[i] === -1) {
+            streetColors.push('white');
+        }
+        else{
+            streetColors.push(colors[streetIds[i] - 1]);
+        }
+
+    }
+    return {field_amount, fieldNames, streetColors};
+}
 
 
 class GameScreen extends React.Component {
     state = {
         game_id: null,
         isGameStarted: false,
+        field_data: null,
+        field_number: null,
+        field_colours: null,
+        field_names: null,
     };
 
     handleSectorClick = (sectorIndex) => {
@@ -21,7 +58,19 @@ class GameScreen extends React.Component {
 
     startGame = () => {
         console.log("Game ID:", this.state.game_id);
-        this.setState({ isGameStarted: true });
+        const ruleData = useFetchRule(1);
+        const result = parserJson(ruleData);
+        this.setState({
+            game_id : this.state.game_id,
+            isGameStarted: true,
+            field_data: ruleData,
+            field_number: result.field_amount,
+            field_colours: result.streetColors,
+            field_names: result.fieldNames,
+        })
+        console.log(this.state.field_number)
+        console.log(this.state.field_colours)
+        console.log(this.state.field_names)
     };
 
     renderInputScreen = () => {
@@ -43,7 +92,7 @@ class GameScreen extends React.Component {
     renderGameContent = () => {
         let game_id = getGameId();
 
-        if(game_id != null){
+        if(game_id == null){
             this.setState({ game_id: game_id });
             this.setState({ isGameStarted: true });
         } else {
@@ -71,11 +120,12 @@ class GameScreen extends React.Component {
                 <View style={styles.rightContainer}>
                     <GameRing
                         radius={350}
-                        numSectors={20}
+                        numSectors={this.state.field_number}
                         onClick={this.handleSectorClick}
                         playersNumber={4}
                         playersPositions={[0, 1, 0, 0]}
-                        sectorNames={['Ulica Huilica 228 1347 sdas', 'Andrew', 'Denis', 'AlSkvar', 'Anton']}
+                        sectorNames={this.state.field_names}
+                        sectorColours={this.state.field_colours}
                         moves={[[], [], [], []]}
                     />
                 </View>

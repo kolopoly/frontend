@@ -72,7 +72,7 @@ class GameRing extends React.Component {
                 borderColor: 'solid black',
                 borderRadius: 0,
                 borderWidth: 0,
-                borderBottom: `${sectorHeight * 0.2}px solid rgb(255, 159, 15)`,
+                borderBottom: `${sectorHeight * 0.2}px solid ${sectorColours[i]}`,
                 textAlign: 'center',
                 lineHeight: '30px',
                 cursor: 'pointer',
@@ -122,7 +122,7 @@ class GameRing extends React.Component {
             <div className="ring-field" style={ringStyle}>
                 {sectorButtons}
                 {this.state.selectedSector !== null && (
-                    <SectorCard sectorColor={'blue'} sectorName={sectorNames[this.state.selectedSector]}
+                    <SectorCard sectorColor={sectorColours[this.state.selectedSector]} sectorName={sectorNames[this.state.selectedSector]}
                                 sectorDescription={'Description test 0 lox @t%/wrongApi'}
                                 sectorWidth={sectorWidth * 1.3}
                                 sectorHeight={sectorHeight * 1.3}/>
