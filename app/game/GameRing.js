@@ -130,17 +130,17 @@ class GameRing extends React.Component {
                     <SectorCard sectorColor={sectorColours[this.state.selectedSector]} sectorName={sectorNames[this.state.selectedSector]}
                                 sectorWidth={sectorWidth * 1.3}
                                 sectorHeight={sectorHeight * 1.3}
-                                actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMoveBuy && getNickname() === currentPlayer}
-                                actionMoveSell={actionMovesSell[this.state.selectedSector][0]}
-                                actionMoveUpgrade={actionMoveUpgrade[this.state.selectedSector[0]]}
+                                actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && (actionMoveBuy === null ? false : actionMoveBuy) && getNickname() === currentPlayer}
+                                actionMoveSell={actionMovesSell != null ? actionMovesSell[this.state.selectedSector][0] : false}
+                                actionMoveUpgrade={actionMoveUpgrade != null ? actionMoveUpgrade[this.state.selectedSector[0]] : false}
                                 buyField={buyField}
                                 sellField={sellField}
                                 upgradeField={upgradeField}
                                 payField={payField}
-                                fees={fees}
-                                upgradePrice={upgradePrice}
-                                buyPrice={buyPrice}
-                                sellPrice={sellPrice}
+                                fees={fees[this.state.selectedSector]}
+                                upgradePrice={upgradePrice[this.state.selectedSector]}
+                                buyPrice={buyPrice[this.state.selectedSector]}
+                                sellPrice={sellPrice[this.state.selectedSector]}
                                 fieldLevel={fieldLevels[this.state.selectedSector]}
                                 actionMovePay={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMovePay && getNickname() === currentPlayer}
                                 sectorId={this.state.selectedSector}
