@@ -39,7 +39,10 @@ class GameRing extends React.Component {
     }
 
     render() {
-        const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames} = this.props;
+        const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames,
+            buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade,
+            currentPlayer
+        } = this.props;
         const { selectedSector } = this.state;
         const newRadius = 350;
         const sectorAngle = 360 / numSectors;
@@ -125,7 +128,15 @@ class GameRing extends React.Component {
                     <SectorCard sectorColor={sectorColours[this.state.selectedSector]} sectorName={sectorNames[this.state.selectedSector]}
                                 sectorDescription={'Description test 0 lox @t%/wrongApi'}
                                 sectorWidth={sectorWidth * 1.3}
-                                sectorHeight={sectorHeight * 1.3}/>
+                                sectorHeight={sectorHeight * 1.3}
+                                actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayer] && actionMoveBuy}
+                                actionMoveSell={actionMovesSell[this.state.selectedSector][0]}
+                                actionMoveUpgrade={actionMoveUpgrade[this.state.selectedSector[0]]}
+                                buyField={buyField}
+                                sellField={sellField}
+                                upgradeField={upgradeField}
+                                sectorId={this.state.selectedSector}
+                    />
                 )}
             </div>
         );

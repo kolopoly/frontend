@@ -2,7 +2,9 @@ import React from 'react';
 
 class SectorCard extends React.Component {
     render() {
-        const { sectorColor, sectorName, sectorDescription, sectorWidth, sectorHeight } = this.props;
+        const { sectorColor, sectorName, sectorDescription, sectorWidth, sectorHeight, sectorId,
+                actionMoveBuy, actionMoveSell, actionMoveUpgrade, sellField, upgradeField, buyField
+        } = this.props;
 
         const contentStyle = {
             width: sectorWidth,
@@ -60,17 +62,17 @@ class SectorCard extends React.Component {
         };
 
         return (
-            <div className="sector-card" style={contentStyle}>
+            <div className="sector-card" style={contentStyle} key={sectorId}>
                 <div style={cardStyle}>
                     <div style={nameStyle}>{sectorName}</div>
                     <div style={descriptionStyle}>{sectorDescription}</div>
                     <table style={buttonTableStyle}>
                         <div style={buttonRowStyle}>
-                            <button style={buttonStyle}>Buy</button>
-                            <button style={buttonStyle}>Sell</button>
+                            {actionMoveBuy === true && <button style={buttonStyle} onClick={() => {buyField(sectorId)}}>Buy</button>}
+                            {actionMoveSell === true && <button style={buttonStyle} onClick={() => {sellField(sectorId)}}>Sell</button>}
                         </div>
                         <div style={buttonRowStyle}>
-                            <button style={buttonStyle}>Update</button>
+                            {actionMoveUpgrade === true && <button style={buttonStyle} onClick={() => {upgradeField(sectorId)}}>Upgrade</button>}
                             <button style={buttonStyle}>Delete</button>
                         </div>
                     </table>

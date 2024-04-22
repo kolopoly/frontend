@@ -141,6 +141,43 @@ const GameScreen = () => {
             return null
         }
     }
+
+    const buyField = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/buy/${state.game_id}/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
+    const upgradeField = async (fieldId) => {
+        try {
+            const response = await fetch(`http://localhost:8000/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
+    const sellField = async (fieldId) =>{
+        try {
+            const response = await fetch(`http://localhost:8000/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
     const [message, setMessages] = useState(null);
     const [socket, setSocket] = useState(null);
     const [socketID, setSocketID] = useState(0);
@@ -283,7 +320,13 @@ const GameScreen = () => {
                         playersPositions={info.playersPositions}
                         sectorNames={state.field_names}
                         sectorColours={state.field_colours}
-                        moves={[[], [], [], []]}
+                        buyField={buyField}
+                        sellField={sellField}
+                        upgradeFiled={upgradeField}
+                        currentPlayer={info.activePlayerIndex}
+                        actionMovesSell={info.actionSell}
+                        actionMoveUpgrade={info.actionUpgrade}
+                        actionMoveBuy={info.actionBuy}
                     />
                 </View>
             </View>
