@@ -252,6 +252,10 @@ const GameScreen = () => {
                        field_colours: state.field_colours,
                        field_names: state.field_names,
                        isGameStartedByHost: true,
+                       fees: state.fees,
+                       upgrade_price: state.upgrade_price,
+                       buy_price: state.buy_price,
+                       sell_price: state.sell_price,
                    })
                 }
             };
@@ -343,6 +347,7 @@ const GameScreen = () => {
 
         const info = parseJsonPlayers(message, state.field_number)
         console.log("INFO:", info)
+        console.log("State:", state)
         console.log(info.players.length)
         return (
             <View style={styles.container}>
@@ -367,6 +372,7 @@ const GameScreen = () => {
                         rollDiceMove={info.actionRoll}
                     />
                 </View>
+                {state.isGameStartedByHost &&
                 <View style={styles.rightContainer}>
                     <GameRing
                         radius={350}
@@ -394,6 +400,7 @@ const GameScreen = () => {
                         actionMovePay={info.actionPay}
                     />
                 </View>
+            }
             </View>
         );
     };
