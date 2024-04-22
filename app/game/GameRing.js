@@ -42,7 +42,7 @@ class GameRing extends React.Component {
     render() {
         const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames,
             buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay,
-            currentPlayer, payField, currentPlayerIndex
+            currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners
         } = this.props;
         const { selectedSector } = this.state;
         const newRadius = 350;
@@ -74,6 +74,7 @@ class GameRing extends React.Component {
                 height: `${sectorHeight}px`,
                 backgroundColor: i === selectedSector ? 'gray' : 'white',
                 borderColor: 'solid black',
+                borderTop: `${sectorHeight * 0.05}px solid ${this.playersColors[fieldOwners[i]]}`,
                 borderRadius: 0,
                 borderWidth: 0,
                 borderBottom: `${sectorHeight * 0.2}px solid ${sectorColours[i]}`,
@@ -127,7 +128,6 @@ class GameRing extends React.Component {
                 {sectorButtons}
                 {this.state.selectedSector !== null && (
                     <SectorCard sectorColor={sectorColours[this.state.selectedSector]} sectorName={sectorNames[this.state.selectedSector]}
-                                sectorDescription={'Description test 0 lox @t%/wrongApi'}
                                 sectorWidth={sectorWidth * 1.3}
                                 sectorHeight={sectorHeight * 1.3}
                                 actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMoveBuy && getNickname() === currentPlayer}
@@ -137,6 +137,11 @@ class GameRing extends React.Component {
                                 sellField={sellField}
                                 upgradeField={upgradeField}
                                 payField={payField}
+                                fees={fees}
+                                upgradePrice={upgradePrice}
+                                buyPrice={buyPrice}
+                                sellPrice={sellPrice}
+                                fieldLevel={fieldLevels[this.state.selectedSector]}
                                 actionMovePay={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMovePay && getNickname() === currentPlayer}
                                 sectorId={this.state.selectedSector}
                     />

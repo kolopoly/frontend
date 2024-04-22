@@ -27,6 +27,10 @@ const parserJson = (ruleData) => {
     const fieldNames = fields.map(field => field.name);
     const streetIds = fields.map(field => field.street_id);
     const colors = Object.values(streets).map(street => street.color);
+    const fees = fields.map(fields => fields.fees);
+    const sellPrice = fields.map(fields => fields.sell_price);
+    const buyPrice = fields.map(fields => fields.buy_price);
+    const upgradePrice = fields.map(fields => fields.upgrade_price);
     let streetColors = []
     for (let i = 0; i < field_amount; i++){
         if(streetIds[i] === -1) {
@@ -37,7 +41,7 @@ const parserJson = (ruleData) => {
         }
 
     }
-    return {field_amount, fieldNames, streetColors};
+    return {field_amount, fieldNames, streetColors, fees, sellPrice, buyPrice, upgradePrice};
 }
 
 const parseJsonPlayers = (gameData) => {
@@ -50,7 +54,7 @@ const parseJsonPlayers = (gameData) => {
         const playersMoney = Object.values(gameData.players_money);
         const lastRolls = gameData.last_rolls;
         const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
-        const fieldOwnersIndices = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0]);
+        const fieldOwners = Object.values(gameData.fields_owners_with_levels).map(owner => players.indexOf(owner[0]));
         const activePlayerIndex = players.indexOf(gameData.active_player);
         const activePlayer = gameData.active_player.toString();
         const actionBuy = gameData.actions.buy;
@@ -60,7 +64,7 @@ const parseJsonPlayers = (gameData) => {
         const actionPay = gameData.actions.pay;
         const actionUpgrade = gameData.actions.upgrade;
         const actionSurrender = gameData.actions.surrender;
-        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender, activePlayer}
+        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwners, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender, activePlayer}
 
     } else {
         let players = [getNickname()]
@@ -89,6 +93,10 @@ const GameScreen = () => {
         field_number: null,
         field_colours: null,
         field_names: null,
+        fees: null,
+        sell_price: null,
+        buy_price: null,
+        upgrade_price: null,
     });
 
     const handleSectorClick = (sectorIndex) => {
@@ -170,7 +178,7 @@ const GameScreen = () => {
 
     const sellField = async (fieldId) =>{
         try {
-            const response = await fetch(`http://localhost:8000/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
+            const response = await fetch(`http://localhost:8000/sell/${state.game_id}/${getNickname()}/${fieldId}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -279,6 +287,10 @@ const GameScreen = () => {
             field_number: result.field_amount,
             field_colours: result.streetColors,
             field_names: result.fieldNames,
+            fees: result.fees,
+            upgrade_price: result.upgradePrice,
+            buy_price: result.buyPrice,
+            sell_price: result.sellPrice,
             isGameStartedByHost: false,
         })
 
@@ -364,6 +376,12 @@ const GameScreen = () => {
                         playersPositions={info.playersPositions}
                         sectorNames={state.field_names}
                         sectorColours={state.field_colours}
+                        fees={state.fees}
+                        buyPrice={state.buy_price}
+                        sellPrice={state.sell_price}
+                        upgradePrice={state.upgrade_price}
+                        fieldLevels={info.fieldLevels}
+                        fieldOwners={info.fieldOwners}
                         buyField={buyField}
                         sellField={sellField}
                         upgradeFiled={upgradeField}

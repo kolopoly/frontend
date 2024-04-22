@@ -2,14 +2,28 @@ import React from 'react';
 
 class SectorCard extends React.Component {
     render() {
-        const { sectorColor, sectorName, sectorDescription, sectorWidth, sectorHeight, sectorId,
-                actionMoveBuy, actionMoveSell, actionMoveUpgrade, actionMovePay, sellField, upgradeField, buyField, payField
+        const { sectorColor, sectorName, sectorWidth, sectorHeight, sectorId,
+                actionMoveBuy, actionMoveSell, actionMoveUpgrade, actionMovePay, sellField, upgradeField, buyField, payField,
+                buyPrice, fees, sellPrice, upgradePrice, fieldLevel,
         } = this.props;
 
         const contentStyle = {
             width: sectorWidth,
             height: sectorHeight + sectorHeight * 0.3,
         }
+
+        const description = `Buy:${buyPrice}$  Sell:${sellPrice}$ 
+                                    Upgrade:${upgradePrice}$
+                                    Fees:
+                                    1.${fees[0]}$ ${fieldLevel === 0 ? '*' : ''}
+                                    2.${fees[1]}$ ${fieldLevel === 1 ? '*' : ''}
+                                    3.${fees[2]}$ ${fieldLevel === 2 ? '*' : ''}
+                                    4.${fees[3]}$ ${fieldLevel === 3 ? '*' : ''}
+                                    5.${fees[4]}$ ${fieldLevel === 4 ? '*' : ''}
+                                    6.${fees[5]}$ ${fieldLevel === 5 ? '*' : ''}
+                                    7.${fees[6]}$ ${fieldLevel === 6 ? '*' : ''}
+                                    
+                                    `
 
         const cardStyle = {
             width: '100%',
@@ -65,7 +79,7 @@ class SectorCard extends React.Component {
             <div className="sector-card" style={contentStyle} key={sectorId}>
                 <div style={cardStyle}>
                     <div style={nameStyle}>{sectorName}</div>
-                    <div style={descriptionStyle}>{sectorDescription}</div>
+                    <div style={descriptionStyle}>{description}</div>
                     <table style={buttonTableStyle}>
                         <div style={buttonRowStyle}>
                             {actionMoveBuy === true && <button style={buttonStyle} onClick={() => {buyField()}}>Buy</button>}
