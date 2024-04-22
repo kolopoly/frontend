@@ -11,8 +11,9 @@ class SectorCard extends React.Component {
             width: sectorWidth,
             height: sectorHeight + sectorHeight * 0.3,
         }
-
-        const description = `Buy:${buyPrice}$  Sell:${sellPrice}$ 
+        let description = ""
+        if(sectorName !== "Start"){
+            description = `Buy:${buyPrice}$  Sell:${sellPrice}$ 
                                     Upgrade:${upgradePrice}$
                                     Fees:
                                     1.${fees[0]}$ ${fieldLevel === 0 ? '*' : ''}
@@ -22,8 +23,8 @@ class SectorCard extends React.Component {
                                     5.${fees[4]}$ ${fieldLevel === 4 ? '*' : ''}
                                     6.${fees[5]}$ ${fieldLevel === 5 ? '*' : ''}
                                     7.${fees[6]}$ ${fieldLevel === 6 ? '*' : ''}
-                                    
                                     `
+        }
 
         const cardStyle = {
             width: '100%',
