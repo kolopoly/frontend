@@ -74,7 +74,7 @@ class GameRing extends React.Component {
                 height: `${sectorHeight}px`,
                 backgroundColor: i === selectedSector ? 'gray' : 'white',
                 borderColor: 'solid black',
-                borderTop: `${sectorHeight * 0.05}px solid ${this.playersColors[fieldOwners[i]]}`,
+                borderTop: `${sectorHeight * 0.05}px solid ${fieldOwners[i] !== -1 ? this.playersColors[fieldOwners[i]] : 'white'}`,
                 borderRadius: 0,
                 borderWidth: 0,
                 borderBottom: `${sectorHeight * 0.2}px solid ${sectorColours[i]}`,

@@ -44,7 +44,7 @@ const parserJson = (ruleData) => {
     return {field_amount, fieldNames, streetColors, fees, sellPrice, buyPrice, upgradePrice};
 }
 
-const parseJsonPlayers = (gameData) => {
+const parseJsonPlayers = (gameData, field_amount) => {
 
     console.log("Game data:", gameData)
     if(gameData !== null && gameData["players_positions"] !== undefined) {
@@ -54,7 +54,7 @@ const parseJsonPlayers = (gameData) => {
         const playersMoney = Object.values(gameData.players_money);
         const lastRolls = gameData.last_rolls;
         const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
-        const fieldOwners = Object.values(gameData.fields_owners_with_levels).map(owner => players.indexOf(owner[0]));
+        const fieldOwners = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0] != null ? players.indexOf(owner[0]) : -1);
         const activePlayerIndex = players.indexOf(gameData.active_player);
         const activePlayer = gameData.active_player.toString();
         const actionBuy = gameData.actions.buy;
@@ -90,7 +90,7 @@ const GameScreen = () => {
         isGameStarted: false,
         isGameStartedByHost: false,
         field_data: null,
-        field_number: null,
+        field_number: 0,
         field_colours: null,
         field_names: null,
         fees: null,
@@ -331,7 +331,7 @@ const GameScreen = () => {
                 isGameStarted: true,
                 isGameStartedByHost: false,
                 field_data: null,
-                field_number: null,
+                field_number: 0,
                 field_colours: null,
                 field_names: null,
             });
@@ -341,7 +341,7 @@ const GameScreen = () => {
             }
         }
 
-        const info = parseJsonPlayers(message)
+        const info = parseJsonPlayers(message, state.field_number)
         console.log("INFO:", info)
         console.log(info.players.length)
         return (
