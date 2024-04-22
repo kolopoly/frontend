@@ -11,6 +11,7 @@ class Description extends React.Component {
             paddingLeft: '5px',
             borderBottom: '1px solid black',
             fontSize: '70%',
+            alignItems: 'center',
         };
 
         return (
