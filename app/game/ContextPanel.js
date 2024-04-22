@@ -4,7 +4,7 @@ import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
 
 const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height,
-                          currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp}) => {
+                          currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex}) => {
 
     const playersPanels = []
 

@@ -2,6 +2,7 @@ import React from 'react';
 import Circle from './PlayerCircles';
 import './ring.css';
 import SectorCard from "./SectorCard";
+import {getNickname} from "../storage";
 
 class GameRing extends React.Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class GameRing extends React.Component {
     render() {
         const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames,
             buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay,
-            currentPlayer, payField
+            currentPlayer, payField, currentPlayerIndex
         } = this.props;
         const { selectedSector } = this.state;
         const newRadius = 350;
@@ -129,14 +130,14 @@ class GameRing extends React.Component {
                                 sectorDescription={'Description test 0 lox @t%/wrongApi'}
                                 sectorWidth={sectorWidth * 1.3}
                                 sectorHeight={sectorHeight * 1.3}
-                                actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayer] && actionMoveBuy}
+                                actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMoveBuy && getNickname() === currentPlayer}
                                 actionMoveSell={actionMovesSell[this.state.selectedSector][0]}
                                 actionMoveUpgrade={actionMoveUpgrade[this.state.selectedSector[0]]}
                                 buyField={buyField}
                                 sellField={sellField}
                                 upgradeField={upgradeField}
                                 payField={payField}
-                                actionMovePay={this.state.selectedSector === playersPositions[currentPlayer] && actionMovePay}
+                                actionMovePay={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMovePay && getNickname() === currentPlayer}
                                 sectorId={this.state.selectedSector}
                     />
                 )}

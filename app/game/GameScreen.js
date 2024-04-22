@@ -51,7 +51,8 @@ const parseJsonPlayers = (gameData) => {
         const lastRolls = gameData.last_rolls;
         const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
         const fieldOwnersIndices = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0]);
-        const activePlayerIndex = gameData.active_player.toString();
+        const activePlayerIndex = players.indexOf(gameData.active_player);
+        const activePlayer = gameData.active_player.toString();
         const actionBuy = gameData.actions.buy;
         const actionEndTurn = gameData.actions.end_turn;
         const actionRoll = gameData.actions.roll;
@@ -59,7 +60,7 @@ const parseJsonPlayers = (gameData) => {
         const actionPay = gameData.actions.pay;
         const actionUpgrade = gameData.actions.upgrade;
         const actionSurrender = gameData.actions.surrender;
-        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender}
+        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender, activePlayer}
 
     } else {
         let players = [getNickname()]
@@ -342,7 +343,8 @@ const GameScreen = () => {
                         width={150}
                         height={800}
                         lastRolls={info.lastRolls}
-                        currentPlayer={info.activePlayerIndex}
+                        currentPlayer={info.activePlayer}
+                        currentPlayerIndex={info.activePlayerIndex}
                         gameStarted={state.isGameStartedByHost}
                         onStart={onStart}
                         onGiveUp={giveUp}
@@ -365,7 +367,8 @@ const GameScreen = () => {
                         sellField={sellField}
                         upgradeFiled={upgradeField}
                         payField={payField}
-                        currentPlayer={info.activePlayerIndex}
+                        currentPlayer={info.activePlayer}
+                        currentPlayerIndex={info.activePlayerIndex}
                         actionMovesSell={info.actionSell}
                         actionMoveUpgrade={info.actionUpgrade}
                         actionMoveBuy={info.actionBuy}
