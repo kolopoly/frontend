@@ -10,7 +10,7 @@ class Description extends React.Component {
             textAlign: 'left',
             paddingLeft: '5px',
             borderBottom: '1px solid black',
-            fontSize: '50%',
+            fontSize: '70%',
         };
 
         return (
