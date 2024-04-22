@@ -19,24 +19,6 @@ const useFetchRule = async (ruleId) => {
     }
 };
 let socket = null;
-const webSocket = async (userId, gameId) => {
-    const [message, setMessages] = useState(null);
-
-    useEffect(() => {
-        // Connect to WebSocket server
-        socket = io(`ws://localhost:8000/connect/${userId}/${gameId}`);
-
-        socket.on('message', (message) => {
-            setMessages(message);
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
-
-    return message.json();
-}
 
 
 const parserJson = (ruleData) => {
@@ -58,7 +40,7 @@ const parserJson = (ruleData) => {
     return {field_amount, fieldNames, streetColors};
 }
 
-const parseJsonPlayers = (playersData) => {
+const parseJsonPlayers = (gameData) => {
     const playersPositions = Object.values(gameData.players_positions);
     const playersMoney = Object.values(gameData.players_money);
     const lastRolls = gameData.last_rolls;
@@ -76,8 +58,8 @@ const parseJsonPlayers = (playersData) => {
 
 }
 
-class GameScreen extends React.Component {
-    state = {
+const GameScreen = () => {
+    const [state, setState] = useState({
         game_id: null,
         isGameStarted: false,
         isGameStartedByHost: false,
@@ -85,68 +67,125 @@ class GameScreen extends React.Component {
         field_number: null,
         field_colours: null,
         field_names: null,
-    };
+    });
 
-    handleSectorClick = (sectorIndex) => {
+    const handleSectorClick = (sectorIndex) => {
         console.log(`Clicked sector ${sectorIndex + 1}`);
     };
 
-    handleInputChange = (text) => {
-        this.setState({ game_id: text });
+    const handleInputChange = (text) => {
+        setState({
+            game_id: text,
+            isGameStarted: false,
+            isGameStartedByHost: false,
+            field_data: null,
+            field_number: null,
+            field_colours: null,
+            field_names: null,
+        });
     };
 
-    startGame = async () => {
-        console.log("Game ID:", this.state.game_id);
+
+    const [message, setMessages] = useState(null);
+    const [socket, setSocket] = useState(null);
+
+
+    useEffect(() => {
+        if(state.game_id) {
+            const ws = new WebSocket(`ws://localhost:8000/connect/${getNickname()}/${state.game_id}`);
+
+            ws.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            ws.onmessage = (event) => {
+                let data = JSON.parse(event.data)
+                setMessages(data);
+                if(data.players_position && !state.isGameStartedByHost){
+                   setState({
+                       game_id: state.game_id,
+                       isGameStarted: state.isGameStartedByHost,
+                       field_data: state.isGameStartedByHost,
+                       field_number: state.field_amount,
+                       field_colours: state.streetColors,
+                       field_names: state.fieldNames,
+                       isGameStartedByHost: true,
+                   })
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket closed');
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            setSocket(ws);
+
+            return () => {
+                ws.close();
+            };
+        }
+    }, [state]);
+
+
+    console.log(message)
+    const startGame = async () => {
+        console.log("Game ID:", state.game_id);
         const ruleData = await useFetchRule(1);
         const result = parserJson(ruleData);
 
-        const backendMessage = await webSocket(getNickname(), this.state.game_id)
-        let gameStarted = false;
-        if(backendMessage.players_position){
-            gameStarted = true;
-        }
 
-
-
-        this.setState({
-            game_id: this.state.game_id,
+        setState({
+            game_id: state.game_id,
             isGameStarted: true,
             field_data: ruleData,
             field_number: result.field_amount,
             field_colours: result.streetColors,
             field_names: result.fieldNames,
-            isGameStartedByHost: gameStarted,
+            isGameStartedByHost: false,
         })
-        console.log(this.state.field_number)
-        console.log(this.state.field_colours)
-        console.log(this.state.field_names)
+
+
+        console.log(state.field_number)
+        console.log(state.field_colours)
+        console.log(state.field_names)
     };
 
-    renderInputScreen = () => {
+    const renderInputScreen = () => {
         return (
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Game ID"
-                    onChangeText={this.handleInputChange}
+                    onChangeText={handleInputChange}
                 />
                 <Button
                     title="Start Game"
-                    onPress={this.startGame}
+                    onPress={startGame}
                 />
             </View>
         );
     };
 
-    renderGameContent = () => {
+    const renderGameContent = () => {
         let game_id = getGameId();
 
         if(game_id != null){
-            this.setState({ game_id: game_id });
-            this.setState({ isGameStarted: true });
+            setState({
+                game_id: game_id,
+                isGameStarted: true,
+                isGameStartedByHost: false,
+                field_data: null,
+                field_number: null,
+                field_colours: null,
+                field_names: null,
+            });
         } else {
-            if (!this.state.isGameStarted) {
-                return this.renderInputScreen();
+            if (!state.isGameStarted) {
+                return renderInputScreen();
             }
         }
 
@@ -164,18 +203,18 @@ class GameScreen extends React.Component {
                         height={800}
                         lastRolls={[1, 1]}
                         currentPlayer={3}
-                        gameStarted={this.state.isGameStartedByHost}
+                        gameStarted={state.isGameStartedByHost}
                     />
                 </View>
                 <View style={styles.rightContainer}>
                     <GameRing
                         radius={350}
-                        numSectors={this.state.field_number}
-                        onClick={this.handleSectorClick}
+                        numSectors={state.field_number}
+                        onClick={handleSectorClick}
                         playersNumber={4}
                         playersPositions={[0, 1, 0, 0]}
-                        sectorNames={this.state.field_names}
-                        sectorColours={this.state.field_colours}
+                        sectorNames={state.field_names}
+                        sectorColours={state.field_colours}
                         moves={[[], [], [], []]}
                     />
                 </View>
@@ -183,9 +222,7 @@ class GameScreen extends React.Component {
         );
     };
 
-    render() {
-        return this.renderGameContent();
-    }
+    return renderGameContent();
 }
 
 const styles = StyleSheet.create({
