@@ -72,26 +72,20 @@ const GameScreen = () => {
     const handleSectorClick = (sectorIndex) => {
         console.log(`Clicked sector ${sectorIndex + 1}`);
     };
+    const [text, setText] = useState("");
 
     const handleInputChange = (text) => {
-        setState({
-            game_id: text,
-            isGameStarted: false,
-            isGameStartedByHost: false,
-            field_data: null,
-            field_number: null,
-            field_colours: null,
-            field_names: null,
-        });
+        setText(text);
     };
 
 
     const [message, setMessages] = useState(null);
     const [socket, setSocket] = useState(null);
-
+    const [socketID, setSocketID] = useState(0);
 
     useEffect(() => {
-        if(state.game_id) {
+        if(state.isGameStarted && state.game_id !== socketID) {
+            setSocketID(state.game_id)
             const ws = new WebSocket(`ws://localhost:8000/connect/${getNickname()}/${state.game_id}`);
 
             ws.onopen = () => {
@@ -101,14 +95,17 @@ const GameScreen = () => {
             ws.onmessage = (event) => {
                 let data = JSON.parse(event.data)
                 setMessages(data);
-                if(data.players_position && !state.isGameStartedByHost){
+                console.log(data)
+                console.log(data['players_positions'] != null)
+                if(data['players_positions'] != null && !state.isGameStartedByHost){
+                    console.log("HERE")
                    setState({
                        game_id: state.game_id,
-                       isGameStarted: state.isGameStartedByHost,
-                       field_data: state.isGameStartedByHost,
-                       field_number: state.field_amount,
-                       field_colours: state.streetColors,
-                       field_names: state.fieldNames,
+                       isGameStarted: state.isGameStarted,
+                       field_data: state.field_data,
+                       field_number: state.field_number,
+                       field_colours: state.field_colours,
+                       field_names: state.field_names,
                        isGameStartedByHost: true,
                    })
                 }
@@ -133,13 +130,13 @@ const GameScreen = () => {
 
     console.log(message)
     const startGame = async () => {
-        console.log("Game ID:", state.game_id);
+        console.log("Game ID:", text);
         const ruleData = await useFetchRule(1);
         const result = parserJson(ruleData);
 
 
         setState({
-            game_id: state.game_id,
+            game_id: text,
             isGameStarted: true,
             field_data: ruleData,
             field_number: result.field_amount,
@@ -190,7 +187,7 @@ const GameScreen = () => {
         }
 
         let nickname = getNickname(); // TODO: Get info from backend
-
+        console.log(state.isGameStartedByHost)
         return (
             <View style={styles.container}>
                 <View style={styles.leftContainer}>
