@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { View, StyleSheet, TextInput, Button } from "react-native";
 import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
+import io from 'socket.io-client';
 
 const useFetchRule = async (ruleId) => {
     try {
@@ -17,6 +18,26 @@ const useFetchRule = async (ruleId) => {
         return null
     }
 };
+let socket = null;
+const webSocket = async (userId, gameId) => {
+    const [message, setMessages] = useState(null);
+
+    useEffect(() => {
+        // Connect to WebSocket server
+        socket = io(`ws://localhost:8000/connect/${userId}/${gameId}`);
+
+        socket.on('message', (message) => {
+            setMessages(message);
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
+    return message.json();
+}
+
 
 const parserJson = (ruleData) => {
     console.log(ruleData)
@@ -60,6 +81,13 @@ class GameScreen extends React.Component {
         console.log("Game ID:", this.state.game_id);
         const ruleData = await useFetchRule(1);
         const result = parserJson(ruleData);
+
+        const backendMessage = await webSocket(getNickname(), this.state.game_id)
+        let gameStarted = false;
+        if(backendMessage.players_position){
+            gameStarted = true;
+        }
+
         this.setState({
             game_id: this.state.game_id,
             isGameStarted: true,
@@ -67,6 +95,7 @@ class GameScreen extends React.Component {
             field_number: result.field_amount,
             field_colours: result.streetColors,
             field_names: result.fieldNames,
+            isGameStartedByHost: gameStarted,
         })
         console.log(this.state.field_number)
         console.log(this.state.field_colours)
