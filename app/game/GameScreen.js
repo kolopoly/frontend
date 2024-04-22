@@ -58,6 +58,24 @@ const parserJson = (ruleData) => {
     return {field_amount, fieldNames, streetColors};
 }
 
+const parseJsonPlayers = (playersData) => {
+    const playersPositions = Object.values(gameData.players_positions);
+    const playersMoney = Object.values(gameData.players_money);
+    const lastRolls = gameData.last_rolls;
+    const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
+    const fieldOwnersIndices = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0]);
+    const activePlayerIndex = Object.keys(gameData.players).indexOf(gameData.active_player.toString());
+    const actionBuy = gameData.actions.buy;
+    const actionEndTurn = gameData.actions.end_turn;
+    const actionRoll = gameData.actions.roll;
+    const actionSell = gameData.actions.sell;
+    const actionPay = gameData.actions.pay;
+    const actionUpgrade = gameData.actions.upgrade;
+
+    return {playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade}
+
+}
+
 class GameScreen extends React.Component {
     state = {
         game_id: null,
@@ -87,6 +105,8 @@ class GameScreen extends React.Component {
         if(backendMessage.players_position){
             gameStarted = true;
         }
+
+
 
         this.setState({
             game_id: this.state.game_id,
