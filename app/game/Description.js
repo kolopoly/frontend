@@ -10,13 +10,14 @@ class Description extends React.Component {
             textAlign: 'left',
             paddingLeft: '5px',
             borderBottom: '1px solid black',
+            fontSize: '50%',
         };
 
         return (
             <div className="description" style={descriptionStyle}>
-                <span>Buy: <span> {buyPrice}</span>$</span>
-                <span>Sell: <span>{sellPrice}</span>$</span>
-                <span>Upgrade: <span>{upgradePrice}</span>$</span>
+                <div><span>Buy: <span> {buyPrice}</span>$</span></div>
+                <div><span>Sell: <span>{sellPrice}</span>$</span></div>
+                <div><span>Upgrade: <span>{upgradePrice}</span>$</span></div>
                 <div>Fees:</div>
                 <div>1. <span>{fees[0]}</span>$ <span>{fieldLevel === 1 ? '*' : ''}</span></div>
                 <div>2. <span>{fees[1]}</span>$ <span>{fieldLevel === 1 ? '*' : ''}</span></div>
