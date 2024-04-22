@@ -4,7 +4,7 @@ import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
 
 const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height,
-                          currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex}) => {
+                          currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex, rollDiceMove}) => {
 
     const playersPanels = []
 
@@ -80,7 +80,7 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                     onClick={() => {
                         rollDice()
                     }}
-                    disabled={getNickname() !== currentPlayer}
+                    disabled={getNickname() !== currentPlayer || !rollDiceMove}
                 >
                     <div style={diceStyle}>
                         {lastRolls[0]}
@@ -97,11 +97,12 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                 {"Start the Game"}
             </button>
             }
-            {endTurn === true &&
+            {endTurn === true && getNickname() === currentPlayer &&
                 <button style={buttonStyle}  onClick={() => {
                     onEndTurn()
                 }}>
                     {"End Turn"}
+
                 </button>
             }
             {giveUp === true &&

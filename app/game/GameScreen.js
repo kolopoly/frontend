@@ -352,6 +352,7 @@ const GameScreen = () => {
                         onEndTurn={endTurn}
                         endTurn={info.actionEndTurn}
                         rollDice={rollDice}
+                        rollDiceMove={info.actionRoll}
                     />
                 </View>
                 <View style={styles.rightContainer}>
