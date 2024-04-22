@@ -3,15 +3,7 @@ import PlayerCircles from "./PlayerCircles";
 import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
 
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted, onStart}) => {
-    const [dice, setDice] = useState({ die1: lastRolls[0], die2: lastRolls[1] });
-
-    // Function to roll two dice
-    const rollDice = () => {
-        const newDie1 = Math.ceil(Math.random() * 6);
-        const newDie2 = Math.ceil(Math.random() * 6);
-        setDice({ die1: newDie1, die2: newDie2 });
-    };
+const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted, onStart, rollDice}) => {
 
     const playersPanels = []
 
@@ -73,25 +65,27 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
         justifyContent: 'center',
         alignItems : 'center'
     }
-
+    console.log(currentPlayer, getNickname(), currentPlayer === getNickname())
     return (
         <div style={panelStyle}>
             {playersPanels}
             <div>
-                <div style={TextName}>
+                <div style={TextName} >
                     {"Roll the Dice"}
                 </div>
+
                 <button
                     style={buttonStyle}
                     onClick={() => {
                         rollDice()
                     }}
+                    disabled={getNickname() !== currentPlayer}
                 >
                     <div style={diceStyle}>
-                        {dice.die1}
+                        {lastRolls[0]}
                     </div>
                     <div style={diceStyle}>
-                        {dice.die2}
+                        {lastRolls[1]}
                     </div>
                 </button>
             </div>

@@ -41,20 +41,40 @@ const parserJson = (ruleData) => {
 }
 
 const parseJsonPlayers = (gameData) => {
-    const playersPositions = Object.values(gameData.players_positions);
-    const playersMoney = Object.values(gameData.players_money);
-    const lastRolls = gameData.last_rolls;
-    const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
-    const fieldOwnersIndices = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0]);
-    const activePlayerIndex = Object.keys(gameData.players).indexOf(gameData.active_player.toString());
-    const actionBuy = gameData.actions.buy;
-    const actionEndTurn = gameData.actions.end_turn;
-    const actionRoll = gameData.actions.roll;
-    const actionSell = gameData.actions.sell;
-    const actionPay = gameData.actions.pay;
-    const actionUpgrade = gameData.actions.upgrade;
 
-    return {playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade}
+    console.log("Game data:", gameData)
+    if(gameData !== null && gameData["players_positions"] !== undefined) {
+        console.log("Players positions:", gameData.players_positions)
+        const players = Object.values(gameData.players);
+        const playersPositions = Object.values(gameData.players_positions);
+        const playersMoney = Object.values(gameData.players_money);
+        const lastRolls = gameData.last_rolls;
+        const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
+        const fieldOwnersIndices = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0]);
+        const activePlayerIndex = gameData.active_player.toString();
+        const actionBuy = gameData.actions.buy;
+        const actionEndTurn = gameData.actions.end_turn;
+        const actionRoll = gameData.actions.roll;
+        const actionSell = gameData.actions.sell;
+        const actionPay = gameData.actions.pay;
+        const actionUpgrade = gameData.actions.upgrade;
+        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade}
+
+    } else {
+        let players = [getNickname()]
+        if(gameData !== null && gameData["players"] !== undefined && gameData["players"]){
+            players = Object.values(gameData.players)
+        }
+        const playersMoney = Array(players.length).fill(0);
+        const playersPositions =  Array(players.length).fill(0);
+        const lastRolls = [0, 0]
+        return {
+            players, playersPositions, playersMoney, lastRolls,
+        }
+    }
+
+
+
 
 }
 
@@ -78,9 +98,39 @@ const GameScreen = () => {
         setText(text);
     };
 
+    const handleCreateGame = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/create/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.text();
+            console.log(data);
+            handleInputChange(data);
+            return data;
+        } catch (error) {
+            return null
+        }
+    }
+
     const onStart = async () => {
         try {
             const response = await fetch(`http://localhost:8000/start_game/${state.game_id}/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            //const data = await response.json();
+            //return data
+        } catch (error) {
+            return null
+        }
+    }
+
+    const rollDice = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/roll/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -164,16 +214,22 @@ const GameScreen = () => {
     };
 
     const renderInputScreen = () => {
+        console.log("HERE")
         return (
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     placeholder="Enter Game ID"
+                    value={text}
                     onChangeText={handleInputChange}
                 />
                 <Button
                     title="Start Game"
                     onPress={startGame}
+                />
+                <Button
+                    title="Create Game"
+                    onPress={handleCreateGame}
                 />
             </View>
         );
@@ -198,22 +254,24 @@ const GameScreen = () => {
             }
         }
 
-        let nickname = getNickname(); // TODO: Get info from backend
-        console.log(state.isGameStartedByHost)
+        const info = parseJsonPlayers(message)
+        console.log("INFO:", info)
+        console.log(info.players.length)
         return (
             <View style={styles.container}>
                 <View style={styles.leftContainer}>
                     <ContextPanel
-                        playersNumber={4}
-                        playersMoney={[100, 12, 3114, 15]}
+                        playersNumber={info.players.length}
+                        playersMoney={info.playersMoney}
                         playersAvatar={[null, null, null, null]}
-                        playersNames={["NextB", "Andrew", "Lahunou", "AlSkvar"]}
+                        playersNames={info.players}
                         width={150}
                         height={800}
-                        lastRolls={[1, 1]}
-                        currentPlayer={3}
+                        lastRolls={info.lastRolls}
+                        currentPlayer={info.activePlayerIndex}
                         gameStarted={state.isGameStartedByHost}
                         onStart={onStart}
+                        rollDice={rollDice}
                     />
                 </View>
                 <View style={styles.rightContainer}>
@@ -221,8 +279,8 @@ const GameScreen = () => {
                         radius={350}
                         numSectors={state.field_number}
                         onClick={handleSectorClick}
-                        playersNumber={4}
-                        playersPositions={[0, 1, 0, 0]}
+                        playersNumber={info.players.length}
+                        playersPositions={info.playersPositions}
                         sectorNames={state.field_names}
                         sectorColours={state.field_colours}
                         moves={[[], [], [], []]}
