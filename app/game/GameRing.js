@@ -55,9 +55,11 @@ class GameRing extends React.Component {
             height: radius * 2,
             position: 'relative'
         };
-
+        console.log(fieldOwners)
+        console.log(sectorHeight * 0.05)
         const sectorButtons = [];
         for (let i = 0; i < numSectors; i++) {
+            console.log(fieldOwners[i] !== -1 ? this.playersColors[fieldOwners[i]] : 'white')
             const sectorStyle = {
                 position: 'absolute',
                 width: '0%',
@@ -75,8 +77,6 @@ class GameRing extends React.Component {
                 backgroundColor: i === selectedSector ? 'gray' : 'white',
                 borderColor: 'solid black',
                 borderTop: `${sectorHeight * 0.05}px solid ${fieldOwners[i] !== -1 ? this.playersColors[fieldOwners[i]] : 'white'}`,
-                borderRadius: 0,
-                borderWidth: 0,
                 borderBottom: `${sectorHeight * 0.2}px solid ${sectorColours[i]}`,
                 textAlign: 'center',
                 lineHeight: '30px',
