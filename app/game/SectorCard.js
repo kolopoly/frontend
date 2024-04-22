@@ -3,7 +3,7 @@ import React from 'react';
 class SectorCard extends React.Component {
     render() {
         const { sectorColor, sectorName, sectorDescription, sectorWidth, sectorHeight, sectorId,
-                actionMoveBuy, actionMoveSell, actionMoveUpgrade, sellField, upgradeField, buyField
+                actionMoveBuy, actionMoveSell, actionMoveUpgrade, actionMovePay, sellField, upgradeField, buyField, payField
         } = this.props;
 
         const contentStyle = {
@@ -68,12 +68,12 @@ class SectorCard extends React.Component {
                     <div style={descriptionStyle}>{sectorDescription}</div>
                     <table style={buttonTableStyle}>
                         <div style={buttonRowStyle}>
-                            {actionMoveBuy === true && <button style={buttonStyle} onClick={() => {buyField(sectorId)}}>Buy</button>}
+                            {actionMoveBuy === true && <button style={buttonStyle} onClick={() => {buyField()}}>Buy</button>}
                             {actionMoveSell === true && <button style={buttonStyle} onClick={() => {sellField(sectorId)}}>Sell</button>}
                         </div>
                         <div style={buttonRowStyle}>
                             {actionMoveUpgrade === true && <button style={buttonStyle} onClick={() => {upgradeField(sectorId)}}>Upgrade</button>}
-                            <button style={buttonStyle}>Delete</button>
+                            {actionMovePay === true && <button style={buttonStyle} onClick={() => {payField()}}>Pay Rent</button>}
                         </div>
                     </table>
                 </div>

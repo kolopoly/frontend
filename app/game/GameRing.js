@@ -40,8 +40,8 @@ class GameRing extends React.Component {
 
     render() {
         const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames,
-            buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade,
-            currentPlayer
+            buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay,
+            currentPlayer, payField
         } = this.props;
         const { selectedSector } = this.state;
         const newRadius = 350;
@@ -135,6 +135,8 @@ class GameRing extends React.Component {
                                 buyField={buyField}
                                 sellField={sellField}
                                 upgradeField={upgradeField}
+                                payField={payField}
+                                actionMovePay={this.state.selectedSector === playersPositions[currentPlayer] && actionMovePay}
                                 sectorId={this.state.selectedSector}
                     />
                 )}

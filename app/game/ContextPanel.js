@@ -3,7 +3,8 @@ import PlayerCircles from "./PlayerCircles";
 import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
 
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted, onStart, rollDice}) => {
+const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height,
+                          currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp}) => {
 
     const playersPanels = []
 
@@ -95,6 +96,20 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
             }}>
                 {"Start the Game"}
             </button>
+            }
+            {endTurn === true &&
+                <button style={buttonStyle}  onClick={() => {
+                    onEndTurn()
+                }}>
+                    {"End Turn"}
+                </button>
+            }
+            {giveUp === true &&
+                <button style={buttonStyle}  onClick={() => {
+                    onGiveUp()
+                }}>
+                    {"Give Up"}
+                </button>
             }
         </div>
     );

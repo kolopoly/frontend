@@ -58,7 +58,8 @@ const parseJsonPlayers = (gameData) => {
         const actionSell = gameData.actions.sell;
         const actionPay = gameData.actions.pay;
         const actionUpgrade = gameData.actions.upgrade;
-        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade}
+        const actionSurrender = gameData.actions.surrender;
+        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwnersIndices, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender}
 
     } else {
         let players = [getNickname()]
@@ -169,6 +170,42 @@ const GameScreen = () => {
     const sellField = async (fieldId) =>{
         try {
             const response = await fetch(`http://localhost:8000/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
+    const payField = async () =>{
+        try {
+            const response = await fetch(`http://localhost:8000/pay/${state.game_id}/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
+    const endTurn = async () =>{
+        try {
+            const response = await fetch(`http://localhost:8000/end_turn/${state.game_id}/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            return null
+        }
+    }
+
+    const giveUp = async () =>{
+        try {
+            const response = await fetch(`http://localhost:8000/surrender/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -308,6 +345,10 @@ const GameScreen = () => {
                         currentPlayer={info.activePlayerIndex}
                         gameStarted={state.isGameStartedByHost}
                         onStart={onStart}
+                        onGiveUp={giveUp}
+                        giveUp={info.actionSurrender}
+                        onEndTurn={endTurn}
+                        endTurn={info.actionEndTurn}
                         rollDice={rollDice}
                     />
                 </View>
@@ -323,10 +364,12 @@ const GameScreen = () => {
                         buyField={buyField}
                         sellField={sellField}
                         upgradeFiled={upgradeField}
+                        payField={payField}
                         currentPlayer={info.activePlayerIndex}
                         actionMovesSell={info.actionSell}
                         actionMoveUpgrade={info.actionUpgrade}
                         actionMoveBuy={info.actionBuy}
+                        actionMovePay={info.actionPay}
                     />
                 </View>
             </View>
