@@ -78,7 +78,19 @@ const GameScreen = () => {
         setText(text);
     };
 
-
+    const onStart = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/start_game/${state.game_id}/${getNickname()}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            //const data = await response.json();
+            //return data
+        } catch (error) {
+            return null
+        }
+    }
     const [message, setMessages] = useState(null);
     const [socket, setSocket] = useState(null);
     const [socketID, setSocketID] = useState(0);
@@ -122,7 +134,7 @@ const GameScreen = () => {
             setSocket(ws);
 
             return () => {
-                ws.close();
+                //ws.close();
             };
         }
     }, [state]);
@@ -201,6 +213,7 @@ const GameScreen = () => {
                         lastRolls={[1, 1]}
                         currentPlayer={3}
                         gameStarted={state.isGameStartedByHost}
+                        onStart={onStart}
                     />
                 </View>
                 <View style={styles.rightContainer}>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PlayerCircles from "./PlayerCircles";
 import PlayersPanel from "./PlayersPanel";
+import {getNickname} from "../storage";
 
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted}) => {
+const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted, onStart}) => {
     const [dice, setDice] = useState({ die1: lastRolls[0], die2: lastRolls[1] });
 
     // Function to roll two dice
@@ -95,8 +96,9 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                 </button>
             </div>
             {gameStarted === false &&
-            <button style={buttonStyle}
-            >
+            <button style={buttonStyle}  onClick={() => {
+                onStart()
+            }}>
                 {"Start the Game"}
             </button>
             }
