@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PlayerCircles from "./PlayerCircles";
 import PlayersPanel from "./PlayersPanel";
 
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer}) => {
+const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height, currentPlayer, gameStarted}) => {
     const [dice, setDice] = useState({ die1: lastRolls[0], die2: lastRolls[1] });
 
     // Function to roll two dice
@@ -35,9 +35,8 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
     }
 
     const buttonStyle = {
-        flex: 1,
         width: width,
-        height: height / 7,
+        height: height / 8,
         backgroundColor: 'rgba(76, 175, 80, 0.3)',
         borderBottomRightRadius: '10%',
         borderBottomLeftRadius: '10%',
@@ -95,6 +94,12 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                     </div>
                 </button>
             </div>
+            {gameStarted === false &&
+            <button style={buttonStyle}
+            >
+                {"Start the Game"}
+            </button>
+            }
         </div>
     );
 };

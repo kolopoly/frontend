@@ -37,11 +37,11 @@ const parserJson = (ruleData) => {
     return {field_amount, fieldNames, streetColors};
 }
 
-
 class GameScreen extends React.Component {
     state = {
         game_id: null,
         isGameStarted: false,
+        isGameStartedByHost: false,
         field_data: null,
         field_number: null,
         field_colours: null,
@@ -115,6 +115,7 @@ class GameScreen extends React.Component {
                         height={800}
                         lastRolls={[1, 1]}
                         currentPlayer={3}
+                        gameStarted={this.state.isGameStartedByHost}
                     />
                 </View>
                 <View style={styles.rightContainer}>
