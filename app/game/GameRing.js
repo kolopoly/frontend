@@ -144,6 +144,7 @@ class GameRing extends React.Component {
                                 fieldLevel={fieldLevels[this.state.selectedSector]}
                                 actionMovePay={this.state.selectedSector === playersPositions[currentPlayerIndex] && actionMovePay && getNickname() === currentPlayer}
                                 sectorId={this.state.selectedSector}
+                                currentPlayer={currentPlayer}
                     />
                 )}
             </div>
