@@ -240,10 +240,7 @@ const GameScreen = () => {
             ws.onmessage = (event) => {
                 let data = JSON.parse(event.data)
                 setMessages(data);
-                console.log(data)
-                console.log(data['players_positions'] != null)
                 if(data['players_positions'] != null && !state.isGameStartedByHost){
-                    console.log("HERE")
                    setState({
                        game_id: state.game_id,
                        isGameStarted: state.isGameStarted,
@@ -271,18 +268,15 @@ const GameScreen = () => {
             setSocket(ws);
 
             return () => {
-                //ws.close();
+                ws.close();
             };
         }
     }, [state]);
 
-
-    console.log(message)
     const startGame = async () => {
         console.log("Game ID:", text);
         const ruleData = await useFetchRule(1);
         const result = parserJson(ruleData);
-
 
         setState({
             game_id: text,
@@ -298,14 +292,9 @@ const GameScreen = () => {
             isGameStartedByHost: false,
         })
 
-
-        console.log(state.field_number)
-        console.log(state.field_colours)
-        console.log(state.field_names)
     };
 
     const renderInputScreen = () => {
-        console.log("HERE")
         return (
             <View style={styles.inputContainer}>
                 <TextInput
@@ -346,8 +335,6 @@ const GameScreen = () => {
         }
 
         const info = parseJsonPlayers(message, state.field_number)
-        console.log("INFO:", info)
-        console.log("State:", state)
         console.log(info.players.length)
         return (
             <View style={styles.container}>

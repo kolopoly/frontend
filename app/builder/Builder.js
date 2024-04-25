@@ -1,25 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, StyleSheet} from "react-native";
-import RingField from './Test';
+import BuilderRing from './BuilderRing';
+import Slider from "rc-slider";
+import CardPanel from './CardPanel';
+
+const Builder = () => {
 
 
 
-class Builder extends React.Component {
-
-    handleSectorClick = (sectorIndex) => {
+    const handleSectorClick = (sectorIndex) => {
         console.log(`Clicked sector ${sectorIndex + 1}`);
     };
+    return (
+        <View style={styles.container}>
+            <View style={styles.leftContainer}>
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.leftContainer}></View>
-                <View style={styles.rightContainer}>
-                <RingField radius={350} numSectors={20} onClick={this.handleSectorClick} />
+                    <CardPanel amount={15}/>
+            </View>
+
+            <View style={styles.rightContainer}>
+                <BuilderRing radius={350} onClick={handleSectorClick} />
                 </View>
             </View>
         );
-    }
 }
 
 
@@ -30,21 +33,36 @@ const styles = StyleSheet.create({
     },
     leftContainer: {
         flex: 1,
-        backgroundColor: "white", // Example background color
+        flexGrow: 2,
+        backgroundColor: "lightblue",
+        justifyContent: 'center',
+        alignItems: "flex-start",
+        paddingLeft: 10, // No need for quotes around numbers
     },
     rightContainer: {
         flex: 1,
-        backgroundColor: "white", // Example background color
-        resizeMode: 'cover',
+        flexGrow: 3,
+        backgroundColor: "lightblue",
         justifyContent: 'center',
     },
-    image: {
+    inputContainer: {
         flex: 1,
-        resizeMode: 'cover',
         justifyContent: 'center',
-        width: '100%',
-        height: '100%',
+        alignItems: 'center',
+    },
+    input: {
+        width: 200,
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        paddingHorizontal: 10,
+    },
+    slider: {
+        width: '50%', // Set the width to 50% of the parent container
+        alignSelf: 'center',
     },
 });
+
 
 export default Builder;

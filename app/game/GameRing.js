@@ -45,7 +45,7 @@ class GameRing extends React.Component {
             currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners
         } = this.props;
         const { selectedSector } = this.state;
-        const newRadius = 350;
+        const newRadius = radius;
         const sectorAngle = 360 / numSectors;
         const sectorWidth = newRadius * 2 * 3.1415 / numSectors;
         const sectorHeight = sectorWidth * 100/150 * numSectors / 10
@@ -128,7 +128,7 @@ class GameRing extends React.Component {
                 {sectorButtons}
                 {this.state.selectedSector !== null && (
                     <SectorCard sectorColor={sectorColours[this.state.selectedSector]} sectorName={sectorNames[this.state.selectedSector]}
-                                sectorWidth={sectorWidth * 1.3}
+                                sectorWidth={radius - sectorHeight * 1.15}
                                 sectorHeight={sectorHeight * 1.3}
                                 actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && (actionMoveBuy === null ? false : actionMoveBuy) && getNickname() === currentPlayer}
                                 actionMoveSell={actionMovesSell != null ? actionMovesSell[this.state.selectedSector][0] : false}
