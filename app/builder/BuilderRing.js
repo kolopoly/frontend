@@ -4,6 +4,8 @@ import SectorCard from './SectorCard';
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
 import { StyleSheet } from 'react-native';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BuilderRing = ({ radius, onClick }) => {
     const [selectedSector, setSelectedSector] = useState(null);
@@ -17,8 +19,9 @@ const BuilderRing = ({ radius, onClick }) => {
     for(let i = 0; i < 35; i++){
         x.push({
             color: 'white',
-            name: 'Sector',
-            type: 'Street'
+            name: 'sector',
+            type: 'street',
+            fees: [100, 50, 3, 4, 5, 6, 7, 8],
         })
     }
     const [sectorProperties, setSectorProperties] = useState(x);
@@ -102,6 +105,33 @@ const BuilderRing = ({ radius, onClick }) => {
         );
     }
 
+    const validateAndSave = () => {
+        let prop = sectorProperties
+        let num = numSectors
+        let json = {
+            "field_amount": num,
+            "start_balance": 500,
+            "fields": []
+        }
+        for (let i = 0; i < num; i++) {
+            let field_data = {
+                "name": prop[i].name,
+                "type": prop[i].type,
+                "color": prop[i].color,
+            }
+            if(prop[i].type === "street"){
+                field_data["fees"] = prop[i].fees.slice(2)
+                field_data["buy_price"] = prop[i].fees[0]
+                field_data["upgrade_price"] = prop[i].fees[1]
+            } else if(prop[i].type === "start"){
+                field_data["add_to_balance"] = 50
+            }
+            json.fields.push(field_data)
+        }
+        console.log(json)
+        toast("OK")
+    }
+
     return (
         <div>
             <Slider
@@ -115,6 +145,7 @@ const BuilderRing = ({ radius, onClick }) => {
                 valueLabelDisplay="auto"
                 style={styles.slider}
             />
+            <button onClick={validateAndSave}> SAVE</button>
             <div className="ring-field" style={ringStyle}>
                 {selectedSector !== null && (
                     <SectorCard
@@ -129,6 +160,7 @@ const BuilderRing = ({ radius, onClick }) => {
                 )}
                 {sectorButtons}
             </div>
+            <ToastContainer/>
         </div>
     );
 };
