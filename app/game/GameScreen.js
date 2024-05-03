@@ -3,7 +3,8 @@ import { View, StyleSheet, TextInput, Button } from "react-native";
 import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
-import io from 'socket.io-client';
+import diceAudioMP3 from '../../assets/dice.mp3';
+
 
 const useFetchRule = async (ruleId) => {
     try {
@@ -22,7 +23,6 @@ let socket = null;
 
 
 const parserJson = (ruleData) => {
-    console.log(ruleData)
     const { field_amount, fields, streets } = ruleData;
     const fieldNames = fields.map(field => field.name);
     const streetIds = fields.map(field => field.street_id);
@@ -46,7 +46,6 @@ const parserJson = (ruleData) => {
 
 const parseJsonPlayers = (gameData, field_amount) => {
 
-    console.log("Game data:", gameData)
     if(gameData !== null && gameData["players_positions"] !== undefined) {
         console.log("Players positions:", gameData.players_positions)
         const players = Object.values(gameData.players);
@@ -85,6 +84,7 @@ const parseJsonPlayers = (gameData, field_amount) => {
 }
 
 const GameScreen = () => {
+    const audioRef = useRef(null);
     const [state, setState] = useState({
         game_id: null,
         isGameStarted: false,
@@ -139,6 +139,13 @@ const GameScreen = () => {
     }
 
     const rollDice = async () => {
+        const x = new Audio("http://localhost:8081/assets/dice.mp3")
+        x.play()
+        //console.log(x.sound)
+        //x.load()
+        //console.log(x.toString())
+        //document.getElementById('audio').play()
+
         try {
             const response = await fetch(`http://localhost:8000/roll/${state.game_id}/${getNickname()}`);
             console.log(response)
@@ -268,7 +275,7 @@ const GameScreen = () => {
             setSocket(ws);
 
             return () => {
-                ws.close();
+                //ws.close();
             };
         }
     }, [state]);
@@ -337,58 +344,60 @@ const GameScreen = () => {
         const info = parseJsonPlayers(message, state.field_number)
         console.log(info.players.length)
         return (
-            <View style={styles.container}>
-                <View style={styles.leftContainer}>
-                    <ContextPanel
-                        playersNumber={info.players.length}
-                        playersMoney={info.playersMoney}
-                        playersAvatar={[null, null, null, null]}
-                        playersNames={info.players}
-                        width={150}
-                        height={800}
-                        lastRolls={info.lastRolls}
-                        currentPlayer={info.activePlayer}
-                        currentPlayerIndex={info.activePlayerIndex}
-                        gameStarted={state.isGameStartedByHost}
-                        onStart={onStart}
-                        onGiveUp={giveUp}
-                        giveUp={info.actionSurrender}
-                        onEndTurn={endTurn}
-                        endTurn={info.actionEndTurn}
-                        rollDice={rollDice}
-                        rollDiceMove={info.actionRoll}
-                    />
+            <div>
+                <View style={styles.container}>
+                    <View style={styles.leftContainer}>
+                        <ContextPanel
+                            playersNumber={info.players.length}
+                            playersMoney={info.playersMoney}
+                            playersAvatar={[null, null, null, null]}
+                            playersNames={info.players}
+                            width={150}
+                            height={800}
+                            lastRolls={info.lastRolls}
+                            currentPlayer={info.activePlayer}
+                            currentPlayerIndex={info.activePlayerIndex}
+                            gameStarted={state.isGameStartedByHost}
+                            onStart={onStart}
+                            onGiveUp={giveUp}
+                            giveUp={info.actionSurrender}
+                            onEndTurn={endTurn}
+                            endTurn={info.actionEndTurn}
+                            rollDice={rollDice}
+                            rollDiceMove={info.actionRoll}
+                        />
+                    </View>
+                    {state.isGameStartedByHost &&
+                    <View style={styles.rightContainer}>
+                        <GameRing
+                            radius={350}
+                            numSectors={state.field_number}
+                            onClick={handleSectorClick}
+                            playersNumber={info.players.length}
+                            playersPositions={info.playersPositions}
+                            sectorNames={state.field_names}
+                            sectorColours={state.field_colours}
+                            fees={state.fees}
+                            buyPrice={state.buy_price}
+                            sellPrice={state.sell_price}
+                            upgradePrice={state.upgrade_price}
+                            fieldLevels={info.fieldLevels}
+                            fieldOwners={info.fieldOwners}
+                            buyField={buyField}
+                            sellField={sellField}
+                            upgradeFiled={upgradeField}
+                            payField={payField}
+                            currentPlayer={info.activePlayer}
+                            currentPlayerIndex={info.activePlayerIndex}
+                            actionMovesSell={info.actionSell}
+                            actionMoveUpgrade={info.actionUpgrade}
+                            actionMoveBuy={info.actionBuy}
+                            actionMovePay={info.actionPay}
+                        />
+                    </View>
+                }
                 </View>
-                {state.isGameStartedByHost &&
-                <View style={styles.rightContainer}>
-                    <GameRing
-                        radius={350}
-                        numSectors={state.field_number}
-                        onClick={handleSectorClick}
-                        playersNumber={info.players.length}
-                        playersPositions={info.playersPositions}
-                        sectorNames={state.field_names}
-                        sectorColours={state.field_colours}
-                        fees={state.fees}
-                        buyPrice={state.buy_price}
-                        sellPrice={state.sell_price}
-                        upgradePrice={state.upgrade_price}
-                        fieldLevels={info.fieldLevels}
-                        fieldOwners={info.fieldOwners}
-                        buyField={buyField}
-                        sellField={sellField}
-                        upgradeFiled={upgradeField}
-                        payField={payField}
-                        currentPlayer={info.activePlayer}
-                        currentPlayerIndex={info.activePlayerIndex}
-                        actionMovesSell={info.actionSell}
-                        actionMoveUpgrade={info.actionUpgrade}
-                        actionMoveBuy={info.actionBuy}
-                        actionMovePay={info.actionPay}
-                    />
-                </View>
-            }
-            </View>
+            </div>
         );
     };
 
