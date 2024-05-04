@@ -122,7 +122,7 @@ class GameRing extends React.Component {
                 </div>
             );
         }
-
+        console.log(actionMoveUpgrade)
         return (
             <div className="ring-field" style={ringStyle}>
                 {sectorButtons}
@@ -132,7 +132,7 @@ class GameRing extends React.Component {
                                 sectorHeight={sectorHeight * 1.3}
                                 actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && (actionMoveBuy === null ? false : actionMoveBuy) && getNickname() === currentPlayer}
                                 actionMoveSell={actionMovesSell != null ? actionMovesSell[this.state.selectedSector][0] : false}
-                                actionMoveUpgrade={actionMoveUpgrade != null ? actionMoveUpgrade[this.state.selectedSector[0]] : false}
+                                actionMoveUpgrade={actionMoveUpgrade != null ? actionMoveUpgrade[this.state.selectedSector][0] : false}
                                 buyField={buyField}
                                 sellField={sellField}
                                 upgradeField={upgradeField}

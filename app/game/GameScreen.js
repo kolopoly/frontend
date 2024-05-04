@@ -25,23 +25,13 @@ let socket = null;
 const parserJson = (ruleData) => {
     const { field_amount, fields, streets } = ruleData;
     const fieldNames = fields.map(field => field.name);
-    const streetIds = fields.map(field => field.street_id);
-    const colors = Object.values(streets).map(street => street.color);
+    const fieldsColors = fields.map(field => field.color);
     const fees = fields.map(fields => fields.fees);
-    const sellPrice = fields.map(fields => fields.sell_price);
+    const sellPrice = fields.map(fields => fields.sell_price ?? 0);
     const buyPrice = fields.map(fields => fields.buy_price);
     const upgradePrice = fields.map(fields => fields.upgrade_price);
-    let streetColors = []
-    for (let i = 0; i < field_amount; i++){
-        if(streetIds[i] === -1) {
-            streetColors.push('white');
-        }
-        else{
-            streetColors.push(colors[streetIds[i] - 1]);
-        }
 
-    }
-    return {field_amount, fieldNames, streetColors, fees, sellPrice, buyPrice, upgradePrice};
+    return {field_amount, fieldNames, fieldsColors, sellPrice, fees, buyPrice, upgradePrice};
 }
 
 const parseJsonPlayers = (gameData, field_amount) => {
@@ -290,7 +280,7 @@ const GameScreen = () => {
             isGameStarted: true,
             field_data: ruleData,
             field_number: result.field_amount,
-            field_colours: result.streetColors,
+            field_colours: result.fieldsColors,
             field_names: result.fieldNames,
             fees: result.fees,
             upgrade_price: result.upgradePrice,
@@ -385,7 +375,7 @@ const GameScreen = () => {
                             fieldOwners={info.fieldOwners}
                             buyField={buyField}
                             sellField={sellField}
-                            upgradeFiled={upgradeField}
+                            upgradeField={upgradeField}
                             payField={payField}
                             currentPlayer={info.activePlayer}
                             currentPlayerIndex={info.activePlayerIndex}
