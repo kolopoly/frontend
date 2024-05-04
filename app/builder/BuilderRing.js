@@ -125,6 +125,8 @@ const BuilderRing = ({ radius, onClick }) => {
                 field_data["upgrade_price"] = prop[i].fees[1]
             } else if(prop[i].type === "start"){
                 field_data["add_to_balance"] = 50
+            } else if(prop[i].type === "prison"){
+                field_data["escape_price"] = 20
             }
             json.fields.push(field_data)
         }

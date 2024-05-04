@@ -65,7 +65,7 @@ class SectorCard extends React.Component {
             display: 'flex',
             justifyContent: 'stretch',
         };
-
+        console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
             <div className="sector-card" style={contentStyle} key={sectorId}>
                 <div style={cardStyle}>
