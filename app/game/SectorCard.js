@@ -1,7 +1,7 @@
 import React from 'react';
 import Description from "./Description";
 import {getNickname} from "../storage";
-
+import '../font.css'
 class SectorCard extends React.Component {
 
     render() {
@@ -30,6 +30,7 @@ class SectorCard extends React.Component {
         };
 
         const nameStyle = {
+            fontFamily: "'Aller', sans-serif",
             fontWeight: 'bold',
             textAlign: 'center', // Center text horizontally
             borderBottom: '1px solid black'
@@ -57,6 +58,7 @@ class SectorCard extends React.Component {
         };
 
         const buttonStyle = {
+            fontFamily: "'Aller', sans-serif",
             flex: '1', // Allow button to grow and fill available space
             margin: '5px',// Space between buttons
         };

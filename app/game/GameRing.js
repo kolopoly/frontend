@@ -3,7 +3,7 @@ import Circle from './PlayerCircles';
 import './ring.css';
 import SectorCard from "./SectorCard";
 import {getNickname} from "../storage";
-
+import '../font.css';
 class GameRing extends React.Component {
     constructor(props) {
         super(props);
@@ -106,6 +106,7 @@ class GameRing extends React.Component {
                             marginTop: '1px',
                         }}>{this.addingPlayers(i, playersNumber, playersPositions)}</div>
                         <div style={{
+                            fontFamily: "'Aller', sans-serif",
                             position: 'absolute',
                             bottom: '0', // Position it at the bottom
                             left: '50%', // Start from the center horizontally

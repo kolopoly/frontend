@@ -1,5 +1,5 @@
 import React from 'react';
-
+import '../font.css'
 class Description extends React.Component {
 
     render() {
@@ -12,6 +12,7 @@ class Description extends React.Component {
             borderBottom: '1px solid black',
             fontSize: '70%',
             alignItems: 'center',
+            fontFamily: "'Aller', sans-serif",
         };
 
         return (
