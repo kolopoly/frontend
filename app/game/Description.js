@@ -7,7 +7,7 @@ class Description extends React.Component {
         } = this.props;
 
         const descriptionStyle = {
-            textAlign: 'left',
+            textAlign: 'center',
             paddingLeft: '5px',
             borderBottom: '1px solid black',
             fontSize: '70%',
@@ -17,7 +17,7 @@ class Description extends React.Component {
 
         return (
             <div className="description" style={descriptionStyle}>
-                <div><span>Buy: <span> {buyPrice}</span>$</span></div>
+                <div><span>Rent: $<span> {buyPrice} </span></span></div>
                 <div><span>Sell: <span>{sellPrice}</span>$</span></div>
                 <div><span>Upgrade: <span>{upgradePrice}</span>$</span></div>
                 <div>Fees:</div>
