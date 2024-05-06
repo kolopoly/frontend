@@ -4,6 +4,7 @@ import {getNickname} from "../storage";
 import '../font.css'
 import SellButton from "./SellButton";
 import BuyButton from "./BuyButton";
+import PayButton from "./PayButton";
 class SectorCard extends React.Component {
 
     render() {
@@ -14,10 +15,19 @@ class SectorCard extends React.Component {
 
         const contentHolder = {
             width: sectorWidth * 1.4,
-            height: sectorHeight * 1.37,
+            height: sectorHeight * 1.57,
             justifyContent: 'start',
             display: 'flex',
             flexDirection: 'row',
+        }
+
+        const contentVerticalHolder = {
+            width: sectorWidth,
+            height: sectorHeight * 1.57,
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
         }
 
         const cardStyle = {
@@ -74,18 +84,6 @@ class SectorCard extends React.Component {
             backgroundColor: sectorColor, //change to actual color
         }
 
-        const buttonTableStyle = {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-
-        };
-        const buttonStyle = {
-            fontFamily: "'Aller', sans-serif",
-            flex: '1', // Allow button to grow and fill available space
-            margin: '5px',// Space between buttons
-        };
-
         const descriptionContainerStyle = {
             display: 'flex',
             justifyContent: 'flex-start', // Align to the start (left side)
@@ -99,18 +97,20 @@ class SectorCard extends React.Component {
                     active={(actionMoveBuy || actionMoveUpgrade) && currentPlayer === getNickname()}
                     clickAction={actionMoveBuy === true ? () => {buyField()} : () => {upgradeField(sectorId)}}>
                 </BuyButton>
-                <div style={cardStyle}>
-                    <div style={insideCard}>
-                        <div style={titleField}>
-                            <div style={nameStyle}>{sectorName}
+                <div style={contentVerticalHolder}>
+                    <div style={cardStyle}>
+                        <div style={insideCard}>
+                            <div style={titleField}>
+                                <div style={nameStyle}>{sectorName}
+                                </div>
                             </div>
+                            {sectorName !== "Start" &&
+                                <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         </div>
-                        {sectorName !== "Start" &&
-                            <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
-                        <table style={buttonTableStyle}>
-                            {actionMovePay === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {payField()}}>Pay Rent</button>}
-                        </table>
                     </div>
+                    {actionMovePay === true && currentPlayer === getNickname() &&
+                        <PayButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                                   clickAction={() => {payField()}}/>}
                 </div>
                 <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
                             active={(actionMoveSell) && currentPlayer === getNickname()}
