@@ -5,10 +5,12 @@ import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
 import diceAudioMP3 from '../../assets/dice.mp3';
 
+const backend = "https://my-image-me3ntghbrq-uk.a.run.app"
+const wsbackend = "ws://my-image-me3ntghbrq-uk.a.run.app"
 
 const useFetchRule = async (ruleId) => {
     try {
-        const response = await fetch(`http://localhost:8000/get_rule/${ruleId}`);
+        const response = await fetch(`${backend}/get_rule/${ruleId}`);
         console.log(response)
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -23,7 +25,7 @@ let socket = null;
 
 
 const parserJson = (ruleData) => {
-    const { field_amount, fields, streets } = ruleData;
+    const { field_amount, fields } = ruleData;
     const fieldNames = fields.map(field => field.name);
     const fieldsColors = fields.map(field => field.color);
     const fees = fields.map(fields => fields.fees);
@@ -100,7 +102,7 @@ const GameScreen = () => {
 
     const handleCreateGame = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/create/${getNickname()}`);
+            const response = await fetch(`${backend}/create/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -116,7 +118,7 @@ const GameScreen = () => {
 
     const onStart = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/start_game/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/start_game/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -137,7 +139,7 @@ const GameScreen = () => {
         //document.getElementById('audio').play()
 
         try {
-            const response = await fetch(`http://localhost:8000/roll/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/roll/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -151,7 +153,7 @@ const GameScreen = () => {
 
     const buyField = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/buy/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/buy/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -163,7 +165,7 @@ const GameScreen = () => {
 
     const upgradeField = async (fieldId) => {
         try {
-            const response = await fetch(`http://localhost:8000/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
+            const response = await fetch(`${backend}/upgrade/${state.game_id}/${getNickname()}/${fieldId}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -175,7 +177,7 @@ const GameScreen = () => {
 
     const sellField = async (fieldId) =>{
         try {
-            const response = await fetch(`http://localhost:8000/sell/${state.game_id}/${getNickname()}/${fieldId}`);
+            const response = await fetch(`${backend}/sell/${state.game_id}/${getNickname()}/${fieldId}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -187,7 +189,7 @@ const GameScreen = () => {
 
     const payField = async () =>{
         try {
-            const response = await fetch(`http://localhost:8000/pay/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/pay/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -199,7 +201,7 @@ const GameScreen = () => {
 
     const endTurn = async () =>{
         try {
-            const response = await fetch(`http://localhost:8000/end_turn/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/end_turn/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -211,7 +213,7 @@ const GameScreen = () => {
 
     const giveUp = async () =>{
         try {
-            const response = await fetch(`http://localhost:8000/surrender/${state.game_id}/${getNickname()}`);
+            const response = await fetch(`${backend}/surrender/${state.game_id}/${getNickname()}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -228,7 +230,7 @@ const GameScreen = () => {
     useEffect(() => {
         if(state.isGameStarted && state.game_id !== socketID) {
             setSocketID(state.game_id)
-            const ws = new WebSocket(`ws://localhost:8000/connect/${getNickname()}/${state.game_id}`);
+            const ws = new WebSocket(`${wsbackend}/connect/${getNickname()}/${state.game_id}`);
 
             ws.onopen = () => {
                 console.log('WebSocket connected');
