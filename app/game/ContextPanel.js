@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PlayerCircles from "./PlayerCircles";
 import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
-
+import '../font.css';
 const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height,
                           currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex, rollDiceMove}) => {
 
@@ -60,6 +60,7 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
         alignItems:'center',
     }
     const TextName = {
+        fontFamily: "'Aller', sans-serif",
         display: 'flex', // use flexbox layout
         flexDirection: 'row', // stack children vertically
         flexWrap: 'wrap',
@@ -101,15 +102,18 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                 <button style={buttonStyle}  onClick={() => {
                     onEndTurn()
                 }}>
-                    {"End Turn"}
-
+                    <div style={TextName} >
+                        {"End Turn"}
+                    </div>
                 </button>
             }
             {giveUp === true &&
                 <button style={buttonStyle}  onClick={() => {
                     onGiveUp()
                 }}>
-                    {"Give Up"}
+                    <div style={TextName} >
+                        {"Give Up"}
+                    </div>
                 </button>
             }
         </div>

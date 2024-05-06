@@ -1,7 +1,9 @@
 import React from 'react';
 import Description from "./Description";
 import {getNickname} from "../storage";
-
+import '../font.css'
+import SellButton from "./SellButton";
+import BuyButton from "./BuyButton";
 class SectorCard extends React.Component {
 
     render() {
@@ -10,79 +12,110 @@ class SectorCard extends React.Component {
                 buyPrice, fees, sellPrice, upgradePrice, fieldLevel, currentPlayer
         } = this.props;
 
-        const contentStyle = {
-            width: sectorWidth,
-            height: sectorHeight + sectorHeight * 0.5,
+        const contentHolder = {
+            width: sectorWidth * 1.4,
+            height: sectorHeight * 1.37,
+            justifyContent: 'start',
+            display: 'flex',
+            flexDirection: 'row',
         }
 
-
         const cardStyle = {
-            width: '100%',
-            height: sectorHeight * 1.1,
+            flexOrder: '2',
+            width: sectorWidth,
+            height: sectorHeight * 1.37,
+            backgroundColor: 'white',
+            borderTopRightRadius: '8%',
+            borderTopLeftRadius: '8%',
+            borderBottomLeftRadius: '8%',
+            borderBottomRightRadius: '8%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: '2',
+            boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+        };
+
+        const insideCard = {
+            width: "85%",
+            height: "90%",
+            paddingLeft: "3px",
+            paddingRight: "3px",
             backgroundColor: 'white',
             display: 'flex',
-            flexDirection: 'column', // Stack children vertically
-            justifyContent: 'space-evenly', // Center children vertically
-            borderTopRightRadius: '10%',
-            borderTopLeftRadius: '10%',
-            border: '2px solid black',
-            alignItems: 'stretch'
-        };
+            flexDirection: 'column',
+            paddingTop: "7px",
+            justifyContent: 'space-between',
+            borderTopRightRadius: '8%',
+            borderTopLeftRadius: '8%',
+            borderBottomLeftRadius: '8%',
+            borderBottomRightRadius: '8%',
+            border: `5px solid ${sectorColor}`,
+            alignItems: 'center',
+        }
 
         const nameStyle = {
-            fontWeight: 'bold',
-            textAlign: 'center', // Center text horizontally
-            borderBottom: '1px solid black'
+            display: "flex",
+            fontSize: sectorWidth * 0.15,
+            fontFamily: "'Aller', sans-serif",
+            textAlign: 'center',
         };
 
-        const descriptionStyle = {
-            textAlign: 'left',
-            paddingLeft: '5px',
-            borderBottom: '1px solid black',
-        };
+        const titleField = {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: "93%",
+            height: "20%",
+            borderTopRightRadius: '15px',
+            borderTopLeftRadius: '15px',
+            borderBottomLeftRadius: '15px',
+            borderBottomRightRadius: '15px',
+            backgroundColor: sectorColor, //change to actual color
+        }
 
         const buttonTableStyle = {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-        };
 
-        const colorStyle = {
-            backgroundColor: sectorColor,
-            width: '100%',
-            height: sectorHeight * 0.3, // Adjust accordingly
-            borderBottomRightRadius: '10%',
-            borderBottomLeftRadius: '10%',
-            border: '2px solid black'
         };
-
         const buttonStyle = {
+            fontFamily: "'Aller', sans-serif",
             flex: '1', // Allow button to grow and fill available space
             margin: '5px',// Space between buttons
         };
 
-        const buttonRowStyle = {
+        const descriptionContainerStyle = {
             display: 'flex',
-            justifyContent: 'stretch',
+            justifyContent: 'flex-start', // Align to the start (left side)
+            width: '100%', // Ensure it takes up full width of the parent
         };
+
         console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
-            <div className="sector-card" style={contentStyle} key={sectorId}>
+            <div style={contentHolder}>
+                <BuyButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                    active={(actionMoveBuy || actionMoveUpgrade) && currentPlayer === getNickname()}
+                    clickAction={actionMoveBuy === true ? () => {buyField()} : () => {upgradeField(sectorId)}}>
+                </BuyButton>
                 <div style={cardStyle}>
-                    <div style={nameStyle}>{sectorName}</div>
-                    {sectorName !== "Start" && <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description>}
-                    <table style={buttonTableStyle}>
-                        <div style={buttonRowStyle}>
-                            {actionMoveBuy === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {buyField()}}>Buy</button>}
-                            {actionMoveSell === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {sellField(sectorId)}}>Sell</button>}
+                    <div style={insideCard}>
+                        <div style={titleField}>
+                            <div style={nameStyle}>{sectorName}
+                            </div>
                         </div>
-                        <div style={buttonRowStyle}>
-                            {actionMoveUpgrade === true && currentPlayer === getNickname()  && <button style={buttonStyle} onClick={() => {upgradeField(sectorId)}}>Upgrade</button>}
+                        {sectorName !== "Start" &&
+                            <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
+                        <table style={buttonTableStyle}>
                             {actionMovePay === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {payField()}}>Pay Rent</button>}
-                        </div>
-                    </table>
+                        </table>
+                    </div>
                 </div>
-                <div style={colorStyle}></div>
+                <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                            active={(actionMoveSell) && currentPlayer === getNickname()}
+                            clickAction={actionMoveSell === true ? () => {sellField(sectorId)} : null}>
+                </SellButton>
             </div>
         );
     }

@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     leftContainer: {
         flex: 1,
         flexGrow: 2,
-        backgroundColor: "lightblue",
+        backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
         alignItems: "flex-start",
         paddingLeft: 10, // No need for quotes around numbers
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     rightContainer: {
         flex: 1,
         flexGrow: 3,
-        backgroundColor: "lightblue",
+        backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
     },
     inputContainer: {

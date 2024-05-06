@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Circle from "./PlayerCircles";
-
+import '../font.css';
 const PlayersPanel = ({playersNumber, playersMoney, playersName, playersAvatar, width, height, currentPlayer}) => {
     const playersColors = ['blue', 'red', 'green', 'yellow'];
     const playersPanels = []
@@ -34,6 +34,7 @@ const PlayersPanel = ({playersNumber, playersMoney, playersName, playersAvatar, 
     }
 
     const elementsStyle = {
+        fontFamily: "'Aller', sans-serif",
         padding : '5px'
     }
 
