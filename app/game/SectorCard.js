@@ -20,27 +20,6 @@ class SectorCard extends React.Component {
             flexDirection: 'row',
         }
 
-        const buttonBuy = {
-            flexOrder: '1',
-            width:sectorWidth * 0.2,
-            height: "15%",
-            marginTop: sectorHeight * 1.37 * 0.2,
-            backgroundColor: 'rgba(167,244,116,255)',
-            borderTopLeftRadius: '10px',
-            borderBottomLeftRadius: '10px',
-            justifyContent: 'center',
-            display: 'flex',
-            flexDirection: 'center',
-            zIndex: '1',
-            boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-            border: "0px",
-        }
-        const textStyle = {
-            fontSize: sectorWidth * 0.18,
-            fontFamily: "'Aller', sans-serif",
-            color: "white",
-        }
-
         const cardStyle = {
             flexOrder: '2',
             width: sectorWidth,
@@ -71,7 +50,7 @@ class SectorCard extends React.Component {
             borderTopLeftRadius: '8%',
             borderBottomLeftRadius: '8%',
             borderBottomRightRadius: '8%',
-            border: `5px solid rgba(251,247,99,255)`,
+            border: `5px solid ${sectorColor}`,
             alignItems: 'center',
         }
 
@@ -92,14 +71,8 @@ class SectorCard extends React.Component {
             borderTopLeftRadius: '15px',
             borderBottomLeftRadius: '15px',
             borderBottomRightRadius: '15px',
-            backgroundColor: 'rgba(251,247,99,255)', //change to actual color
+            backgroundColor: sectorColor, //change to actual color
         }
-
-        const descriptionStyle = {
-            textAlign: 'left',
-            paddingLeft: '5px',
-            borderBottom: '1px solid black',
-        };
 
         const buttonTableStyle = {
             display: 'flex',
@@ -113,10 +86,12 @@ class SectorCard extends React.Component {
             margin: '5px',// Space between buttons
         };
 
-        const buttonRowStyle = {
+        const descriptionContainerStyle = {
             display: 'flex',
-            justifyContent: 'stretch',
+            justifyContent: 'flex-start', // Align to the start (left side)
+            width: '100%', // Ensure it takes up full width of the parent
         };
+
         console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
             <div style={contentHolder}>
@@ -130,16 +105,10 @@ class SectorCard extends React.Component {
                             <div style={nameStyle}>{sectorName}
                             </div>
                         </div>
-                        {sectorName !== "Start" && <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description>}
+                        {sectorName !== "Start" &&
+                            <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         <table style={buttonTableStyle}>
-                            <div style={buttonRowStyle}>
-                                {actionMoveBuy === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {buyField()}}>Buy</button>}
-                                {actionMoveSell === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {sellField(sectorId)}}>Sell</button>}
-                            </div>
-                            <div style={buttonRowStyle}>
-                                {actionMoveUpgrade === true && currentPlayer === getNickname()  && <button style={buttonStyle} onClick={() => {upgradeField(sectorId)}}>Upgrade</button>}
-                                {actionMovePay === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {payField()}}>Pay Rent</button>}
-                            </div>
+                            {actionMovePay === true && currentPlayer === getNickname() && <button style={buttonStyle} onClick={() => {payField()}}>Pay Rent</button>}
                         </table>
                     </div>
                 </div>

@@ -1,33 +1,55 @@
 import React from 'react';
-import '../font.css'
+import '../font.css';
 class Description extends React.Component {
 
     render() {
-        const { buyPrice, fees, sellPrice, upgradePrice, fieldLevel,
-        } = this.props;
+        const { buyPrice, fees, sellPrice, upgradePrice, fieldLevel } = this.props;
 
         const descriptionStyle = {
-            textAlign: 'center',
-            paddingLeft: '5px',
-            borderBottom: '1px solid black',
-            fontSize: '70%',
-            alignItems: 'center',
             fontFamily: "'Aller', sans-serif",
+            marginLeft: '5px',
+            marginRight: '5px',
         };
 
+        const centeredText = {
+            textAlign: 'center',
+            width: '100%', // Ensure that "RENT" takes up the full width and centers the content
+        };
+
+        const leftRightContainer = {
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+        };
+
+        const descriptionStyleCurrentLevel = {
+            color: "red",
+        };
+
+        // Function for applying field level styles
+        const levelStyles = index => ({
+            ...descriptionStyle,
+            ...(index === fieldLevel ? descriptionStyleCurrentLevel : {}),
+        });
+
         return (
-            <div className="description" style={descriptionStyle}>
-                <div><span>Rent: $<span> {buyPrice} </span></span></div>
-                <div><span>Sell: <span>{sellPrice}</span>$</span></div>
-                <div><span>Upgrade: <span>{upgradePrice}</span>$</span></div>
-                <div>Fees:</div>
-                <div>1. <span>{fees[0]}</span>$ <span>{fieldLevel === 0 ? '*' : ''}</span></div>
-                <div>2. <span>{fees[1]}</span>$ <span>{fieldLevel === 1 ? '*' : ''}</span></div>
-                <div>3. <span>{fees[2]}</span>$ <span>{fieldLevel === 2 ? '*' : ''}</span></div>
-                <div>4. <span>{fees[3]}</span>$ <span>{fieldLevel === 3 ? '*' : ''}</span></div>
-                <div>5. <span>{fees[4]}</span>$ <span>{fieldLevel === 4 ? '*' : ''}</span></div>
-                <div>6. <span>{fees[5]}</span>$ <span>{fieldLevel === 5 ? '*' : ''}</span></div>
-                <div>7. <span>{fees[6]}</span>$ <span>{fieldLevel === 6 ? '*' : ''}</span></div>
+            <div className="description" style={{ width: '100%' }}>
+                <div style={levelStyles(0)}>
+                    <div style={centeredText}>RENT: ${fees[0]}</div>
+                </div>
+
+                {fees.slice(1).map((fee, index) => (
+                    <div key={index} style={levelStyles(index + 1)}>
+                        <div style={leftRightContainer}>
+                            <span>{index === 0 ? 'whole street' : `${index} upgrade`}</span>
+                            <span>${fee}</span>
+                        </div>
+                    </div>
+                ))}
+                <div style={descriptionStyle}>
+                    <div style={centeredText}>Sell: {sellPrice}$</div>
+                    <div style={centeredText}>Upgrade: {upgradePrice}$</div>
+                </div>
             </div>
         );
     }
