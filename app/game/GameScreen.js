@@ -336,7 +336,7 @@ const GameScreen = () => {
         const info = parseJsonPlayers(message, state.field_number)
         console.log(info.players.length)
         return (
-            <div>
+            <div style={styles.globalContainer}>
                 <View style={styles.container}>
                     <View style={styles.leftContainer}>
                         <ContextPanel
@@ -344,8 +344,8 @@ const GameScreen = () => {
                             playersMoney={info.playersMoney}
                             playersAvatar={[null, null, null, null]}
                             playersNames={info.players}
-                            width={150}
-                            height={800}
+                            width={window.innerWidth * 0.3}
+                            height={window.innerHeight}
                             lastRolls={info.lastRolls}
                             currentPlayer={info.activePlayer}
                             currentPlayerIndex={info.activePlayerIndex}
@@ -359,10 +359,9 @@ const GameScreen = () => {
                             rollDiceMove={info.actionRoll}
                         />
                     </View>
-                    {state.isGameStartedByHost &&
                     <View style={styles.rightContainer}>
-                        <GameRing
-                            radius={350}
+                        {state.isGameStartedByHost && <GameRing
+                            radius={window.innerHeight * 0.4}
                             numSectors={state.field_number}
                             onClick={handleSectorClick}
                             playersNumber={info.players.length}
@@ -386,8 +385,8 @@ const GameScreen = () => {
                             actionMoveBuy={info.actionBuy}
                             actionMovePay={info.actionPay}
                         />
+                        }
                     </View>
-                }
                 </View>
             </div>
         );
@@ -400,14 +399,22 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
+        backgroundColor: "rgba(191,230,196,255)",
+    },
+    globalContainer: {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        backgroundColor: "rgba(191,230,196,255)",
+        alignItems: "center",
     },
     leftContainer: {
         flex: 1,
         flexGrow: 2,
         backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
-        alignItems: "flex-start",
-        paddingLeft: 10, // No need for quotes around numbers
+        alignItems: "center",
+        paddingLeft: 10,
+        marginRight: 40,
     },
     rightContainer: {
         flex: 1,

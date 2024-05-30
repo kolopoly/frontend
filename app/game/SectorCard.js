@@ -2,9 +2,9 @@ import React from 'react';
 import Description from "./Description";
 import {getNickname} from "../storage";
 import '../font.css'
-import SellButton from "./SellButton";
-import BuyButton from "./BuyButton";
-import PayButton from "./PayButton";
+import SellButton from "./Buttons/SellButton";
+import BuyButton from "./Buttons/BuyButton";
+import PayButton from "./Buttons/PayButton";
 class SectorCard extends React.Component {
 
     render() {
