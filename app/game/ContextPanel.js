@@ -4,7 +4,8 @@ import PlayersPanel from "./PlayersPanel";
 import {getNickname} from "../storage";
 import '../font.css';
 import RollButton from "./Buttons/RollButton";
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar, lastRolls, width, height,
+import PanelButtons from "./Buttons/PanelButtons";
+const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars, lastRolls, width, height,
                           currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex, rollDiceMove}) => {
 
     const playersPanels = []
@@ -12,7 +13,7 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
     for(let i = 0; i < playersNumber; i++){
        playersPanels.push(
            <div>
-               <PlayersPanel playersNumber={i} playersName={playersNames[i]} playersMoney={playersMoney[i]} width={width} height={height / 7} currentPlayer={currentPlayer}>
+               <PlayersPanel playersNumber={i} playersName={playersNames[i]} playersAvatar={playersAvatars != null ? playersAvatars[i] : null} playersMoney={playersMoney[i]} width={width} height={height / 7} currentPlayer={currentPlayer}>
                </PlayersPanel>
            </div>
        )
@@ -30,39 +31,13 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
         backgroundColor: 'transparent'
     }
 
-    const buttonStyle = {
-        width: width,
-        height: height / 8,
-        backgroundColor: 'rgba(76, 175, 80, 0.3)',
-        borderBottomRightRadius: '10%',
-        borderBottomLeftRadius: '10%',
-        borderTopRightRadius: '10%',
-        borderTopLeftRadius: '10%',
-        padding: '5px',
-        display: 'flex', // use flexbox layout
-        flexDirection: 'row', // stack children vertically
-        flexWrap: 'wrap', // allow wrapping of children if needed
-        justifyContent: 'center', // center children along the main axis
-        alignItems:'center',
-        gap: '10px',
-    }
-
-    const TextName = {
-        fontFamily: "'Aller', sans-serif",
-        display: 'flex', // use flexbox layout
-        flexDirection: 'row', // stack children vertically
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        alignItems : 'center'
-    }
-
     const lowerButtons = {
         width: '90%',
         height: '20%',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
-
+        alignItems: 'center',
+        gap: '10px',
     }
 
     const rightColumn = {
@@ -70,14 +45,8 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
         width: '60%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
-    }
-
-    const smallButtonStyle = {
-        ...buttonStyle,
-        width: '100px', // Adjust this value for your desired size
-        height: '30px', // Adjust this value as well
-        margin: '5px 0' // Adds some space between smaller buttons vertically
+        alignItems: 'center',
+        gap: '10px',
     }
 
     console.log(currentPlayer, getNickname(), currentPlayer === getNickname())
@@ -89,29 +58,36 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatar,
                     clickAction={rollDice} active={getNickname() === currentPlayer && rollDiceMove} diceOne={lastRolls[0]} diceTwo={lastRolls[1]}/>
                 <div style={rightColumn}>
                     {gameStarted === false &&
-                        <button style={smallButtonStyle} onClick={() => {
-                            onStart()
-                        }}>
-                            {"Start the Game"}
-                        </button>
+                        <PanelButtons buttonWidth={width * 0.3}
+                                      buttonHeight={height * 0.3 * 0.2}
+                                      active={true}
+                                      clickAction={() => {onStart()}}
+                                      buttonColour={'rgba(212,240,217,255)'}
+                                      buttonText={"Start the Game"}/>
                     }
-                    {endTurn === true && getNickname() === currentPlayer &&
-                        <button style={smallButtonStyle} onClick={() => {
-                            onEndTurn()
-                        }}>
-                            <div style={TextName}>
-                                {"End Turn"}
-                            </div>
-                        </button>
+                    {gameStarted === true &&
+                        <PanelButtons buttonWidth={width * 0.3}
+                                      buttonHeight={height * 0.3 * 0.2}
+                                      active={endTurn === true && getNickname() === currentPlayer}
+                                      clickAction={() => {onEndTurn()}}
+                                      buttonColour={'rgba(212,240,217,255)'}
+                                      buttonText={"End Turn"}/>
                     }
-                    {giveUp === true &&
-                        <button style={smallButtonStyle} onClick={() => {
-                            onGiveUp()
-                        }}>
-                            <div style={TextName}>
-                                {"Give Up"}
-                            </div>
-                        </button>
+                    {gameStarted === true &&
+                        <PanelButtons buttonWidth={width * 0.3}
+                                      buttonHeight={height * 0.3 * 0.2}
+                                      active={false}
+                                      clickAction={null}
+                                      buttonColour={'rgba(212,240,217,255)'}
+                                      buttonText={"Trade"}/>
+                    }
+                    {gameStarted === true &&
+                        <PanelButtons buttonWidth={width * 0.3}
+                                      buttonHeight={height * 0.3 * 0.2}
+                                      active={giveUp === true}
+                                      clickAction={() => {onGiveUp()}}
+                                      buttonColour={'rgba(244,150,151,255)'}
+                                      buttonText={"Give Up"}/>
                     }
                 </div>
             </div>

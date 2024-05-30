@@ -4,6 +4,7 @@ import './ring.css';
 import SectorCard from "./SectorCard";
 import {getNickname} from "../storage";
 import '../font.css';
+import {Image} from "react-native";
 class GameRing extends React.Component {
     constructor(props) {
         super(props);
@@ -14,13 +15,25 @@ class GameRing extends React.Component {
 
     playersColors = ['blue', 'red', 'green', 'yellow'];
 
-    addingPlayers(currentSector, playersNumber, playersPositions){
+    playersDefaultAvatars = [
+        require('../../assets/defaultAvatars/icon0005.png'),
+        require('../../assets/defaultAvatars/icon0002.png'),
+        require('../../assets/defaultAvatars/icon0004.png'),
+        require('../../assets/defaultAvatars/icon0003.png')
+    ];
+
+
+
+    addingPlayers(currentSector, playersNumber, playersPositions, playersAvatars){
         const playersCircles = []
+        const avatarStyle = {
+            width: '50px',
+            height: '50px',
+            marginRight: '30px',
+        }
         for (let i = 0; i < playersNumber; i++) {
             if (playersPositions[i] === currentSector) {
-                playersCircles.push(<div>
-                    <Circle color={this.playersColors[i]} number={i + 1} radius={12}/>
-                </div>)
+                playersCircles.push(<Image source={this.playersDefaultAvatars[i]} style={avatarStyle} resizeMode="contain"/>);
             }
         }
         return (
@@ -40,7 +53,7 @@ class GameRing extends React.Component {
     }
 
     render() {
-        const { radius, numSectors, onClick, playersNumber, playersPositions, sectorColours, sectorNames,
+        const { radius, numSectors, onClick, playersNumber, playersPositions, playersAvatars, sectorColours, sectorNames,
             buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay,
             currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners
         } = this.props;
@@ -125,7 +138,7 @@ class GameRing extends React.Component {
                             transform: 'translateX(-50%)',
                             textAlign: 'center',
                             marginTop: '1px',
-                        }}>{this.addingPlayers(i, playersNumber, playersPositions)}</div>
+                        }}>{this.addingPlayers(i, playersNumber, playersPositions, playersAvatars != null ? playersAvatars : null)}</div>
                         <div style={{
                             fontFamily: "'Aller', sans-serif",
                             position: 'absolute',
