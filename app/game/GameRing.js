@@ -5,6 +5,7 @@ import SectorCard from "./SectorCard";
 import {getNickname} from "../storage";
 import '../font.css';
 import {Image} from "react-native";
+import UpgradesBlock from "./UpgradesBlock";
 class GameRing extends React.Component {
     constructor(props) {
         super(props);
@@ -119,6 +120,7 @@ class GameRing extends React.Component {
 
             sectorButtons.push(
                 <div key={i} style={sectorStyle}>
+                    <UpgradesBlock width={sectorWidth} height={sectorHeight} fees={fees[i]} fieldLevel={fieldLevels[i]}/>
                     <button
                         style={buttonStyle}
                         onClick={() => {
