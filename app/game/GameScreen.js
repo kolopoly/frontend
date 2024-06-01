@@ -5,8 +5,10 @@ import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
 import diceAudioMP3 from '../../assets/dice.mp3';
 
-const backend = "https://my-image-me3ntghbrq-uk.a.run.app"
-const wsbackend = "ws://my-image-me3ntghbrq-uk.a.run.app"
+//const backend = "https://my-image-me3ntghbrq-uk.a.run.app"
+//const wsbackend = "ws://my-image-me3ntghbrq-uk.a.run.app"
+const backend = "http://localhost:8000"
+const wsbackend = "ws://localhost:8000"
 
 const useFetchRule = async (ruleId) => {
     try {
