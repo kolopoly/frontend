@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import "../font.css"
+import "../../font.css"
 
 const SellButton = ({sectorWidth, sectorHeight, active, clickAction}) => {
 

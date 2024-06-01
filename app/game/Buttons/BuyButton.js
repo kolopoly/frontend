@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
-import "../font.css"
+import "../../font.css"
 
-const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
+const BuyButton = ({sectorWidth, sectorHeight, active, clickAction}) => {
 
     const [isPressed, setIsPressed] = useState(false);
 
     const defaultStyle = {
-        flexOrder: '3',
-        width: sectorWidth * 0.8,
-        height: sectorHeight * 0.2,
-        backgroundColor:'rgba(236,94,31,255)',
-        borderBottomRightRadius: '10px',
+        flexOrder: '1',
+        width:sectorWidth * 0.2,
+        height: "15%",
+        marginTop: sectorHeight * 1.37 * 0.2,
+        backgroundColor: active === true ? 'rgba(167,244,116,255)' : 'gray',
+        borderTopLeftRadius: '10px',
         borderBottomLeftRadius: '10px',
-        display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'center',
         zIndex: '1',
         boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
         border: "0px",
-        cursor: 'pointer',
+        cursor: active === true ? 'pointer' : '',
         transition: 'background-color 0.2s',
-    };
+    }
 
     const pressedStyle = {
         ...defaultStyle,
-        backgroundColor: 'rgba(236,94,31,255)',
+        backgroundColor: 'rgba(167,244,116,0.8)',
         boxShadow: "rgba(0, 0, 0, 0.1) 0px 5px 10px, rgba(0, 0, 0, 0.1) 0px 3px 3px",
     };
 
@@ -36,8 +37,12 @@ const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
 
     let buttonStyle
 
-    buttonStyle = defaultStyle;
-
+    if (active === true) {
+        buttonStyle = isPressed ? pressedStyle : defaultStyle;
+    }
+    else{
+        buttonStyle = defaultStyle;
+    }
     return (
         <button
             style={buttonStyle}
@@ -46,13 +51,13 @@ const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
             onMouseLeave={() => setIsPressed(false)}
             onTouchStart={() => setIsPressed(true)}
             onTouchEnd={() => setIsPressed(false)}
-            onClick={clickAction}
+            onClick={active === true ? clickAction : null}
         >
             <div style={textStyle}>
-                Pay Rent
+                +
             </div>
         </button>
     );
 }
 
-export default PayButton;
+export default BuyButton;
