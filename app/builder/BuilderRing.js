@@ -6,6 +6,7 @@ import Slider from 'rc-slider';
 import { StyleSheet } from 'react-native';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import SaveButton from "./SaveButton";
 
 const BuilderRing = ({ radius, onClick }) => {
     const [selectedSector, setSelectedSector] = useState(null);
@@ -49,14 +50,14 @@ const BuilderRing = ({ radius, onClick }) => {
     const sectorButtons = [];
     const prop = sectorProperties
     for (let i = 0; i < numSectors; i++) {
+
         const sectorStyle = {
             position: 'absolute',
             width: '0%',
             height: `${newRadius * 2}px`,
             transformOrigin: 'center',
-            transform: `rotate(${sectorAngle * i}deg)`,
+            transform: `rotate(${sectorAngle * i}deg)`
         };
-
         const buttonStyle = {
             position: 'absolute',
             top: 0,
@@ -64,14 +65,36 @@ const BuilderRing = ({ radius, onClick }) => {
             transform: 'translateX(-50%)',
             width: `${sectorWidth}px`,
             height: `${sectorHeight}px`,
-            backgroundColor: i === selectedSector ? 'gray' : 'white',
+            backgroundColor: i === 0 ? 'rgba(136,171,150,255)' : i % 2 === 0 ? 'rgba(182,219,186,255)' : 'rgba(197,232,201,255)',
             borderColor: 'solid black',
-            borderBottom: `${sectorHeight * 0.1}px solid ${prop[i].color}`,
+            borderTop: `${sectorHeight * 0.05}px solid rgba(136,171,150,255)`,
+            borderBottom: `${sectorHeight * 0.2}px solid ${prop[i].color}`,
             textAlign: 'center',
             lineHeight: '30px',
             cursor: 'pointer',
-            clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)',
+            clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)'
         };
+
+        let whiter = {
+            backgroundColor: 'transparent'
+        }
+
+        if(selectedSector === i){
+            whiter = {
+                position: 'absolute',
+                top: 0,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: `${sectorWidth}px`,
+                height: `${sectorHeight}px`,
+                lineHeight: '30px',
+                clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)',
+                border: '4px solid white',
+                backgroundColor: 'rgb(255,255,255,0.8)',
+                pointerEvents: 'none',
+            }
+        }
+
         sectorButtons.push(
             <div key={i} style={sectorStyle}>
                 <button
@@ -87,20 +110,24 @@ const BuilderRing = ({ radius, onClick }) => {
                 >
                     <div
                         style={{
+                            fontFamily: "'Aller', sans-serif",
                             position: 'absolute',
-                            bottom: '0', // Position it at the bottom
-                            left: '50%', // Start from the center horizontally
-                            width: '70%', // Set the width of the text container to be 80% of its parent
-                            transform: 'translateX(-50%)',
+                            bottom: `-${sectorHeight * 0.2 - 5}px`,
+                            left: '50%',
+                            width: '70%',
+                            transform: 'translate(-50%, 0)',
                             textAlign: 'center',
-                            fontSize: '70%',
+                            fontSize: '90%',
                             lineHeight: '15px',
                             marginTop: `${sectorHeight * 0.5}px`,
+                            backgroundColor: 'rgba(255, 255, 255, 0)', // Optional: Set a background color if needed to cover the border
+                            zIndex: '10' // Ensure the zIndex is higher than the button's border
                         }}
                     >
-                        {''}
+                        {prop[i].name}
                     </div>
                 </button>
+                <div style={whiter}></div>
             </div>
         );
     }
@@ -135,7 +162,7 @@ const BuilderRing = ({ radius, onClick }) => {
     }
 
     return (
-        <div>
+        <div style={styles.holder}>
             <Slider
                 min={14}
                 max={25}
@@ -146,8 +173,8 @@ const BuilderRing = ({ radius, onClick }) => {
                 marks
                 valueLabelDisplay="auto"
                 style={styles.slider}
+
             />
-            <button onClick={validateAndSave}> SAVE</button>
             <div className="ring-field" style={ringStyle}>
                 {selectedSector !== null && (
                     <SectorCard
@@ -162,6 +189,7 @@ const BuilderRing = ({ radius, onClick }) => {
                 )}
                 {sectorButtons}
             </div>
+            <SaveButton sectorWidth={100} sectorHeight={100} clickAction={validateAndSave}/>
             <ToastContainer/>
         </div>
     );
@@ -172,6 +200,15 @@ const styles = StyleSheet.create({
         width: '50%', // Set the width to 50% of the parent container
         alignSelf: 'center',
     },
+    holder: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between"
+    },
+    button:{
+
+    }
 });
 
 export default BuilderRing;

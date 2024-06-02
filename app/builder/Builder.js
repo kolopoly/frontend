@@ -3,6 +3,8 @@ import {View, StyleSheet} from "react-native";
 import BuilderRing from './BuilderRing';
 import Slider from "rc-slider";
 import CardPanel from './CardPanel';
+import ContextPanel from "../game/ContextPanel";
+import GameRing from "../game/GameRing";
 
 const Builder = () => {
 
@@ -30,19 +32,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
+        backgroundColor: "rgba(191,230,196,255)",
     },
     leftContainer: {
         flex: 1,
         flexGrow: 2,
-        backgroundColor: "lightblue",
+        backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
-        alignItems: "flex-start",
-        paddingLeft: 10, // No need for quotes around numbers
+        alignItems: "center",
+        paddingLeft: 10,
+        marginRight: 40,
     },
     rightContainer: {
         flex: 1,
         flexGrow: 3,
-        backgroundColor: "lightblue",
+        backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
     },
     inputContainer: {
