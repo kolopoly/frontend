@@ -4,6 +4,7 @@ import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
 import {backend, wsbackend} from "../backend"
+
 const useFetchRule = async (ruleId) => {
     try {
         const response = await fetch(`${backend}/get_rule/${ruleId}`);
