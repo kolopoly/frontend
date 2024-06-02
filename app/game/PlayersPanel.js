@@ -2,8 +2,10 @@ import React from 'react';
 import Circle from './PlayerCircles';
 import '../font.css';
 import { Image } from "react-native";
+import PanelButtons from "./Buttons/PanelButtons";
+import {getNickname} from "../storage";
 
-const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar, width, height, currentPlayer }) => {
+const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar, width, height, currentPlayer, showTradeButton, gameStarted, onTrade, tradeInfo, playerIndex, currentPlayerIndex}) => {
     const playersColors = ['blue', 'red', 'green', 'yellow'];
     const playersDefaultAvatars = [
         require('../../assets/defaultAvatars/icon0005.png'),
@@ -104,6 +106,21 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
                         {/* Placeholder for the table */}
                     </div>
                 </div>
+                {gameStarted === true && playerIndex !== currentPlayerIndex &&
+                    <PanelButtons buttonWidth={width * 0.7}
+                                  buttonHeight={height * 0.65}
+                                  active={showTradeButton && currentPlayer === getNickname()}
+                                  clickAction={() => {tradeInfo.clicked === true ? onTrade({clicked: false,
+                                                                                     with: 0,
+                                                                                     amount: 0,
+                                                                                     playerFields: [],}) :
+                                                                          onTrade({clicked: true,
+                                                                              with: playersNumber,
+                                                                              amount: 0,
+                                                                              playerFields: [],})}}
+                                  buttonColour={'rgba(180,240,217,255)'}
+                                  buttonText={showTradeButton && tradeInfo.clicked === true ? "Cancel Trade" : "Trade"}/>
+                }
             </div>
         </div>
     );

@@ -3,11 +3,7 @@ import { View, StyleSheet, TextInput, Button } from "react-native";
 import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
-import diceAudioMP3 from '../../assets/dice.mp3';
-
-const backend = "https://my-image-me3ntghbrq-uk.a.run.app"
-const wsbackend = "ws://my-image-me3ntghbrq-uk.a.run.app"
-
+import {backend, wsbackend} from "../backend"
 const useFetchRule = async (ruleId) => {
     try {
         const response = await fetch(`${backend}/get_rule/${ruleId}`);
@@ -37,7 +33,7 @@ const parserJson = (ruleData) => {
 }
 
 const parseJsonPlayers = (gameData, field_amount) => {
-
+    console.log(gameData)
     if(gameData !== null && gameData["players_positions"] !== undefined) {
         console.log("Players positions:", gameData.players_positions)
         const players = Object.values(gameData.players);
@@ -49,14 +45,23 @@ const parseJsonPlayers = (gameData, field_amount) => {
         const activePlayerIndex = players.indexOf(gameData.active_player);
         const activePlayer = gameData.active_player.toString();
         const actionBuy = gameData.actions.buy;
+        const actionTrade = gameData.actions.action_trade;
+        const actionAcceptTrade = gameData.actions.action_answer_trade;
+        console.log(gameData)
+        console.log("gameData.trade", gameData.trade)
+        let trade = gameData.trade;
+        if(!actionAcceptTrade) {
+            trade = {
+                fields: []
+            }
+        }
         const actionEndTurn = gameData.actions.end_turn;
         const actionRoll = gameData.actions.roll;
         const actionSell = gameData.actions.sell;
         const actionPay = gameData.actions.pay;
         const actionUpgrade = gameData.actions.upgrade;
         const actionSurrender = gameData.actions.surrender;
-        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwners, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender, activePlayer}
-
+        return {players, playersPositions, playersMoney, lastRolls, fieldLevels, fieldOwners, activePlayerIndex, actionBuy, actionEndTurn, actionRoll, actionSell, actionPay, actionUpgrade, actionSurrender, activePlayer, actionAcceptTrade, actionTrade, trade}
     } else {
         let players = [getNickname()]
         if(gameData !== null && gameData["players"] !== undefined && gameData["players"]){
@@ -90,10 +95,14 @@ const GameScreen = () => {
         buy_price: null,
         upgrade_price: null,
     });
+    const [trade, setTrade] = useState({
+        clicked: false,
+        with: 0,
+        amount: "",
+        playerFields: [],
+    })
 
-    const handleSectorClick = (sectorIndex) => {
-        console.log(`Clicked sector ${sectorIndex + 1}`);
-    };
+
     const [text, setText] = useState("");
 
     const handleInputChange = (text) => {
@@ -130,13 +139,47 @@ const GameScreen = () => {
         }
     }
 
+    const sendTrade = async (trade) => {
+        trade['game_id'] = state.game_id
+        try {
+            const response = await fetch(`${backend}/request_trade`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(trade)
+            });
+            setTrade({clicked: false,
+                with: 0,
+                amount: "",
+                playerFields: [],})
+        } catch (error) {
+            console.error('Fetch error:', error);
+            return null;
+        }
+    };
+
+    const sendAccept = async (trade, answer) => {
+        try {
+            const response = await fetch(`${backend}/answer_trade/${state.game_id}/${getNickname()}/${trade["trade_id"]}/${answer}`);
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            //const data = await response.json();
+            //return data
+        } catch (error) {
+            return null
+        }
+    }
+
+    const onTrade = async (trade) => {
+        setTrade(trade)
+    }
+
     const rollDice = async () => {
         const x = new Audio("http://localhost:8081/assets/dice.mp3")
         x.play()
-        //console.log(x.sound)
-        //x.load()
-        //console.log(x.toString())
-        //document.getElementById('audio').play()
 
         try {
             const response = await fetch(`${backend}/roll/${state.game_id}/${getNickname()}`);
@@ -357,13 +400,15 @@ const GameScreen = () => {
                             endTurn={info.actionEndTurn}
                             rollDice={rollDice}
                             rollDiceMove={info.actionRoll}
+                            trade={info.actionTrade}
+                            onTrade={onTrade}
+                            tradeInfo={trade}
                         />
                     </View>
                     <View style={styles.rightContainer}>
                         {state.isGameStartedByHost && <GameRing
                             radius={window.innerHeight * 0.4}
                             numSectors={state.field_number}
-                            onClick={handleSectorClick}
                             playersNumber={info.players.length}
                             playersPositions={info.playersPositions}
                             sectorNames={state.field_names}
@@ -384,6 +429,15 @@ const GameScreen = () => {
                             actionMoveUpgrade={info.actionUpgrade}
                             actionMoveBuy={info.actionBuy}
                             actionMovePay={info.actionPay}
+                            tradeInfo={trade}
+                            trade={info.trade}
+                            playerNames={info.players}
+                            playersMoney={info.playersMoney}
+                            onTrade={onTrade}
+                            sendTrade={sendTrade}
+                            sendAccept={sendAccept}
+                            acceptTrade={info.actionAcceptTrade}
+                            acceptTradeTrade={info.trade}
                         />
                         }
                     </View>
