@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Circle from './PlayerCircles';
 import './ring.css';
 import SectorCard from "./SectorCard";
@@ -6,11 +6,16 @@ import {getNickname} from "../storage";
 import '../font.css';
 import {Image} from "react-native";
 import UpgradesBlock from "./UpgradesBlock";
+import "./blink.css"
+import TradeCard from "./TradeCard";
+import AcceptTradeCard from "./AcceptTradeCard";
+
 class GameRing extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedSector: null
+            selectedSector: null,
+            tradeFields: [],
         };
     }
 
@@ -54,11 +59,10 @@ class GameRing extends React.Component {
     }
 
     render() {
-        const { radius, numSectors, onClick, playersNumber, playersPositions, playersAvatars, sectorColours, sectorNames,
-            buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay,
-            currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners
+        const { radius, numSectors, playersNumber, playersPositions, playersAvatars, sectorColours, sectorNames,
+            buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay, acceptTrade, acceptTradeTrade,
+            currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners, trade, tradeInfo, playerNames, playersMoney, onTrade, sendTrade, sendAccept
         } = this.props;
-        const { selectedSector } = this.state;
         const newRadius = radius;
         const sectorAngle = 360 / numSectors;
         const sectorWidth = newRadius * 2 * 3.1415 / numSectors;
@@ -102,7 +106,7 @@ class GameRing extends React.Component {
                 backgroundColor: 'transparent'
             }
 
-            if(selectedSector === i){
+            if(this.state.selectedSector === i){
                 whiter = {
                     position: 'absolute',
                     top: 0,
@@ -117,14 +121,13 @@ class GameRing extends React.Component {
                     pointerEvents: 'none',
                 }
             }
-
+            console.log("FIELD ACCEPT", acceptTradeTrade)
             sectorButtons.push(
                 <div key={i} style={sectorStyle}>
                     <UpgradesBlock width={sectorWidth} height={sectorHeight} fees={fees[i]} fieldLevel={fieldLevels[i]}/>
                     <button
                         style={buttonStyle}
                         onClick={() => {
-                            onClick(i);
                             if (this.state.selectedSector === i) {
                                 this.setState({selectedSector: null})
                             }
@@ -132,6 +135,28 @@ class GameRing extends React.Component {
                                 this.setState({selectedSector: i});
                             }
                         }}
+                        onDoubleClick={() => {
+                            if(!tradeInfo.clicked){
+                                return
+                            }
+                            let x = {
+                                clicked: tradeInfo.clicked,
+                                with: tradeInfo.with,
+                                playerFields: tradeInfo.playerFields,
+                                amount: tradeInfo.amount
+                            }
+                            if (x.playerFields.indexOf(i) !== -1) {
+                                x.playerFields.splice(x.playerFields.indexOf(i))
+                                onTrade(x)
+                            }
+                            else {
+                                x.playerFields.push(i)
+                                onTrade(x)
+                            }
+                            console.log(x)
+                        }}
+                        disabled={tradeInfo.clicked && ((fieldOwners[i] !== tradeInfo.with && fieldOwners[i] !== currentPlayerIndex)  || fieldLevels[i] > 1) && !(this.state.selectedSector === i)}
+                        className={tradeInfo.playerFields.indexOf(i) !== -1 || acceptTradeTrade.fields.indexOf(i) !== -1 ? "blinking" : null}
                     >
                         <div style={{
                             position: 'absolute', // Position absolutely
@@ -187,9 +212,40 @@ class GameRing extends React.Component {
                                 currentPlayer={currentPlayer}
                     />
                 )}
+                {this.state.selectedSector === null && tradeInfo.clicked && (
+                    <TradeCard sectorColor={"white"}
+                               sectorName={"Trade with " + playerNames[tradeInfo.with]}
+                                sectorWidth={radius - sectorHeight * 1.15}
+                                sectorHeight={sectorHeight * 1.3}
+                                currentPlayer={currentPlayer}
+                                currentPlayerIndex={currentPlayerIndex}
+                                tradeInfo={tradeInfo}
+                                fieldOwners={fieldOwners}
+                                buyPrice={buyPrice}
+                                playersMoney={playersMoney}
+                                onTrade={onTrade}
+                                sendTrade={sendTrade}
+                                playersNames={playerNames}
+                    />
+                )}
+                {this.state.selectedSector === null && acceptTrade && currentPlayer === getNickname() && (
+                    <AcceptTradeCard sectorColor={"white"}
+                                     tradeInfo={acceptTradeTrade}
+                                     sectorName={"Trade with " + acceptTradeTrade.player_id1}
+                                     sectorWidth={radius - sectorHeight * 1.15}
+                                     sectorHeight={sectorHeight * 1.3}
+                                     currentPlayer={currentPlayer}
+                                     currentPlayerIndex={currentPlayerIndex}
+                                     fieldOwners={fieldOwners}
+                               buyPrice={buyPrice}
+                               playersMoney={playersMoney}
+                               onTrade={onTrade}
+                                     sendAccept={sendAccept}
+                               playersNames={playerNames}
+                    />
+                )}
             </div>
         );
     }
 }
-
 export default GameRing;
