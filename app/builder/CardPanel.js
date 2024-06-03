@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import Card from "./Card";
 import {ScrollView, View, StyleSheet, Text} from "react-native";
 
-const CardPanel = ({amount}) => {
-    const ClassCard = ({ className }) => {
+const CardPanel = ({amount, clickCopy}) => {
+    const ClassCard = ({ className, id }) => {
         return (
             <View style={styles.classCard}>
                 <Text>{className}</Text>
+                <button onClick={() => {clickCopy(id)}}>Copy</button>
             </View>
         );
     };
@@ -71,7 +72,7 @@ const CardPanel = ({amount}) => {
     return (
             <ScrollView contentContainerStyle={styles.scrollContentContainer}>
                 {Array.from({ length: amount }, (_, i) => (
-                    <ClassCard key={i} className={`Class ${i + 1}`} />
+                    <ClassCard key={i} className={`Class ${i + 1}`} id = {i} />
                 ))}
             </ScrollView>
     );
