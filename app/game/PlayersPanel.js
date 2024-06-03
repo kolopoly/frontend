@@ -106,7 +106,7 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
                         {/* Placeholder for the table */}
                     </div>
                 </div>
-                {gameStarted === true && playerIndex !== currentPlayerIndex &&
+                {gameStarted === true && playersName[playerIndex] !== getNickname() &&
                     <PanelButtons buttonWidth={width * 0.7}
                                   buttonHeight={height * 0.65}
                                   active={showTradeButton && currentPlayer === getNickname()}
