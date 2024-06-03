@@ -12,7 +12,10 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*",
+      "assets/audios/*",
+      "assets/defaultAvatars/*",
+      "assets/defaultAvatars/dice/*"
     ],
     "ios": {
       "supportsTablet": true
