@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './ring.css';
 import SectorCard from './SectorCard';
 import 'rc-slider/assets/index.css';
@@ -7,31 +7,15 @@ import { StyleSheet } from 'react-native';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SaveButton from "./SaveButton";
+import {backend, wsbackend} from "../backend";
+import {getNickname} from "../storage";
 
-const BuilderRing = ({ radius, onClick }) => {
+const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSectorProperty, numSectors, setValue}) => {
     const [selectedSector, setSelectedSector] = useState(null);
-    const [numSectors, setValue] = useState(15);
     const newRadius = radius;
     const sectorAngle = 360 / numSectors;
     const sectorWidth = (newRadius * 2 * 3.1415) / numSectors;
     const sectorHeight = (sectorWidth * 100) / 150 * (numSectors / 10);
-
-    let x = []
-    for(let i = 0; i < 35; i++){
-        x.push({
-            color: 'white',
-            name: 'sector',
-            type: 'street',
-            fees: [100, 50, 3, 4, 5, 6, 7, 8],
-        })
-    }
-    const [sectorProperties, setSectorProperties] = useState(x);
-
-    const updateSectorProperty = (index, property, value) => {
-        const updatedProperties = [...sectorProperties];
-        updatedProperties[index] = { ...updatedProperties[index], [property]: value };
-        setSectorProperties(updatedProperties);
-    };
 
     console.log(sectorProperties)
     const handleSliderChange = (newValue) => {
@@ -49,6 +33,7 @@ const BuilderRing = ({ radius, onClick }) => {
 
     const sectorButtons = [];
     const prop = sectorProperties
+    console.log(prop)
     for (let i = 0; i < numSectors; i++) {
 
         const sectorStyle = {
@@ -132,7 +117,7 @@ const BuilderRing = ({ radius, onClick }) => {
         );
     }
 
-    const validateAndSave = () => {
+    const validateAndSave = async () => {
         let prop = sectorProperties
         let num = numSectors
         let json = {
@@ -158,8 +143,26 @@ const BuilderRing = ({ radius, onClick }) => {
             json.fields.push(field_data)
         }
         console.log(json)
+        try {
+            console.log(`${backend}/save_rule`)
+            const response = await fetch(`${backend}/save_rule`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(json)
+            });
+            console.log(`${backend}/save_rules`)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+        } catch (error) {
+            toast(error)
+        }
         toast("OK")
     }
+
 
     return (
         <div style={styles.holder}>
