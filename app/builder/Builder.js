@@ -32,6 +32,7 @@ const Builder = () => {
     };
 
     useEffect(() => {
+        console.log(`${backend}/get_rules`)
         const fetchRules = async () => {
             const response = await fetch(`${backend}/get_rules`);
             console.log(response);
