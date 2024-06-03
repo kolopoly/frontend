@@ -112,7 +112,7 @@ const GameScreen = () => {
 
     const handleCreateGame = async () => {
         try {
-            const response = await fetch(`${backend}/create/${getNickname()}`);
+            const response = await fetch(`${backend}/create/${getNickname()}/1`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
