@@ -104,7 +104,7 @@ class SectorCard extends React.Component {
                                 <div style={nameStyle}>{sectorName}
                                 </div>
                             </div>
-                            {sectorName !== "start" && sectorName !== "prison" &&
+                            {sectorName !== "Start" && sectorName !== "Prison" &&
                                 <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         </div>
                     </div>

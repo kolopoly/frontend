@@ -29,7 +29,7 @@ const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
     };
 
     const textStyle = {
-        fontSize: sectorWidth * 0.18,
+        fontSize: sectorWidth * 0.14,
         fontFamily: "'Aller', sans-serif",
         color: "white",
     }
