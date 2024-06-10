@@ -40,7 +40,7 @@ const parseJsonPlayers = (gameData, field_amount) => {
         const players = Object.values(gameData.players);
         const playersPositions = Object.values(gameData.players_positions);
         const playersMoney = Object.values(gameData.players_money);
-        const lastRolls = gameData.last_rolls;
+        var lastRolls = gameData.last_rolls;
         const fieldLevels = Object.values(gameData.fields_owners_with_levels).map(field => field[1]);
         const fieldOwners = Object.values(gameData.fields_owners_with_levels).map(owner => owner[0] != null ? players.indexOf(owner[0]) : -1);
         const activePlayerIndex = players.indexOf(gameData.active_player);
@@ -56,6 +56,9 @@ const parseJsonPlayers = (gameData, field_amount) => {
                 fields: []
             }
         }
+        if(lastRolls[0] === 0){
+            lastRolls = [1, 1]
+        }
         const actionEndTurn = gameData.actions.end_turn;
         const actionRoll = gameData.actions.roll;
         const actionSell = gameData.actions.sell;
@@ -70,7 +73,7 @@ const parseJsonPlayers = (gameData, field_amount) => {
         }
         const playersMoney = Array(players.length).fill(0);
         const playersPositions =  Array(players.length).fill(0);
-        const lastRolls = [0, 0]
+        const lastRolls = [1, 1]
         return {
             players, playersPositions, playersMoney, lastRolls,
         }
@@ -179,7 +182,7 @@ const GameScreen = () => {
     }
 
     const rollDice = async () => {
-        const x = new Audio("http://localhost:8081/assets/dice.mp3")
+        const x = new Audio(`${backend}/assets/dice.mp3`)
         x.play()
 
         try {

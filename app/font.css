@@ -1,4 +1,4 @@
 @font-face {
     font-family: 'Aller';
-    src: local('Aller'), url(../../assets/Aller_Bd.ttf) format('truetype');
+    src: local('Aller'), url("http://localhost:8000/assets/Aller_Bd.ttf") format('truetype');
 }
