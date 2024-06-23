@@ -330,7 +330,7 @@ const GameScreen = () => {
 
     const startGame = async () => {
         console.log("Game ID:", text);
-        const ruleData = await useFetchRule(1);
+        const ruleData = await useFetchRule(textRuleID);
         const result = parserJson(ruleData);
 
         setState({
