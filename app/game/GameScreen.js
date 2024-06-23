@@ -108,14 +108,23 @@ const GameScreen = () => {
 
 
     const [text, setText] = useState("");
+    const [textRuleID, setTextRuleID] = useState("");
+
 
     const handleInputChange = (text) => {
         setText(text);
     };
 
+    const handleRuleInputChange = (text) => {
+        setTextRuleID(text);
+    };
     const handleCreateGame = async () => {
         try {
-            const response = await fetch(`${backend}/create/${getNickname()}/1`);
+            let rule = textRuleID
+            if(rule === "") {
+                rule = "1"
+            }
+            const response = await fetch(`${backend}/create/${getNickname()}/${rule}`);
             console.log(response)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -345,18 +354,27 @@ const GameScreen = () => {
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Enter Game ID"
-                    value={text}
-                    onChangeText={handleInputChange}
-                />
-                <Button
-                    title="Start Game"
-                    onPress={startGame}
+                    placeholder="Enter Rule ID"
+                    value={textRuleID}
+                    onChangeText={handleRuleInputChange}
                 />
                 <Button
                     title="Create Game"
                     onPress={handleCreateGame}
                 />
+                <div style={{margin: '10px'}}></div>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter Game ID"
+                    value={text}
+                    onChangeText={handleInputChange}
+                />
+
+                <Button
+                    title="Join Game"
+                    onPress={startGame}
+                />
+
             </View>
         );
     };
