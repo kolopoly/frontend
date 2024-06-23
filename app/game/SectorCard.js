@@ -13,12 +13,21 @@ class SectorCard extends React.Component {
                 buyPrice, fees, sellPrice, upgradePrice, fieldLevel, currentPlayer
         } = this.props;
 
-        const contentHolder = {
+        let contentHolder = {
             width: sectorWidth * 1.4,
             height: sectorHeight * 1.57,
             justifyContent: 'start',
             display: 'flex',
             flexDirection: 'row',
+        }
+        if (sectorType !== 'street'){
+            contentHolder = {
+                width: sectorWidth * 1.4,
+                height: sectorHeight * 1.57,
+                justifyContent: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+            }
         }
 
         const contentVerticalHolder = {
