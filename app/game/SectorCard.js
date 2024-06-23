@@ -119,7 +119,7 @@ class SectorCard extends React.Component {
                     </div>
                     {actionMovePay === true && currentPlayer === getNickname() &&
                         <PayButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
-                                   clickAction={() => {payField()}}/>}
+                                   clickAction={() => {payField()}} payButtonText={sectorType === 'street' ? 'Pay Rent' : sectorType === 'prison' ? 'Pay to Escape' : 'undefined'}/>}
                 </div>
                 {sectorType === 'street' && <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
                             active={(actionMoveSell) && currentPlayer === getNickname()}

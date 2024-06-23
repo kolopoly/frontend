@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../font.css"
 
-const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
+const PayButton = ({sectorWidth, sectorHeight, clickAction, payButtonText}) => {
 
     const [isPressed, setIsPressed] = useState(false);
 
@@ -29,7 +29,7 @@ const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
     };
 
     const textStyle = {
-        fontSize: sectorWidth * 0.14,
+        fontSize: sectorWidth * 0.14 * 8/payButtonText.length,
         fontFamily: "'Aller', sans-serif",
         color: "white",
     }
@@ -49,7 +49,7 @@ const PayButton = ({sectorWidth, sectorHeight, clickAction}) => {
             onClick={clickAction}
         >
             <div style={textStyle}>
-                Pay Rent
+                {payButtonText}
             </div>
         </button>
     );
