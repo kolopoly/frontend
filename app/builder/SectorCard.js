@@ -207,7 +207,6 @@ class SectorCard extends React.Component {
                                     })}
                                 </div>
                             ))}
-                            {sectorName !== "start" && sectorName !== "prison"}
                         </div>
                     </div>
                     <select style={TypeSelector} value={property.type} onChange={

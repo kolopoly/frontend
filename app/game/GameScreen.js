@@ -24,13 +24,14 @@ let socket = null;
 const parserJson = (ruleData) => {
     const { field_amount, fields } = ruleData;
     const fieldNames = fields.map(field => field.name);
+    const fieldTypes = fields.map(field => field.type)
     const fieldsColors = fields.map(field => field.color);
     const fees = fields.map(fields => fields.fees);
     const sellPrice = fields.map(fields => fields.sell_price ?? 0);
     const buyPrice = fields.map(fields => fields.buy_price);
     const upgradePrice = fields.map(fields => fields.upgrade_price);
 
-    return {field_amount, fieldNames, fieldsColors, sellPrice, fees, buyPrice, upgradePrice};
+    return {field_amount, fieldNames, fieldTypes, fieldsColors, sellPrice, fees, buyPrice, upgradePrice};
 }
 
 const parseJsonPlayers = (gameData, field_amount) => {
@@ -94,6 +95,7 @@ const GameScreen = () => {
         field_number: 0,
         field_colours: null,
         field_names: null,
+        field_types: null,
         fees: null,
         sell_price: null,
         buy_price: null,
@@ -303,6 +305,7 @@ const GameScreen = () => {
                        field_number: state.field_number,
                        field_colours: state.field_colours,
                        field_names: state.field_names,
+                       field_types: state.field_types,
                        isGameStartedByHost: true,
                        fees: state.fees,
                        upgrade_price: state.upgrade_price,
@@ -340,6 +343,7 @@ const GameScreen = () => {
             field_number: result.field_amount,
             field_colours: result.fieldsColors,
             field_names: result.fieldNames,
+            field_types: result.fieldTypes,
             fees: result.fees,
             upgrade_price: result.upgradePrice,
             buy_price: result.buyPrice,
@@ -391,6 +395,7 @@ const GameScreen = () => {
                 field_number: 0,
                 field_colours: null,
                 field_names: null,
+                field_types: null,
             });
         } else {
             if (!state.isGameStarted) {
@@ -434,6 +439,7 @@ const GameScreen = () => {
                             playersNumber={info.players.length}
                             playersPositions={info.playersPositions}
                             sectorNames={state.field_names}
+                            sectorTypes={state.field_types}
                             sectorColours={state.field_colours}
                             fees={state.fees}
                             buyPrice={state.buy_price}
