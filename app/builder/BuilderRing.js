@@ -138,7 +138,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
             } else if(prop[i].type === "start"){
                 field_data["add_to_balance"] = 50
             } else if(prop[i].type === "prison"){
-                field_data["escape_price"] = 20
+                field_data["escape_price"] = prop[i].escape_price
             }
             json.fields.push(field_data)
         }

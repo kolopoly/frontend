@@ -55,7 +55,7 @@ class SectorCard extends React.Component {
             boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
         };
 
-        const insideCard = {
+        let insideCard = {
             width: "85%",
             height: "90%",
             paddingLeft: "3px",
@@ -93,11 +93,19 @@ class SectorCard extends React.Component {
             backgroundColor: sectorColor, //change to actual color
         }
 
-        const descriptionContainerStyle = {
+        let descriptionContainerStyle = {
             display: 'flex',
             justifyContent: 'flex-start', // Align to the start (left side)
             width: '100%', // Ensure it takes up full width of the parent
         };
+        if (sectorType === 'prison'){
+            descriptionContainerStyle = {
+                ...descriptionContainerStyle,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }
+        }
 
         console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
@@ -113,8 +121,8 @@ class SectorCard extends React.Component {
                                 <div style={nameStyle}>{sectorName}
                                 </div>
                             </div>
-                            {sectorType === 'street' &&
-                                <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
+                            {(sectorType === 'street' || sectorType === 'prison') &&
+                                <div style={descriptionContainerStyle}> <Description fieldType={sectorType} buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         </div>
                     </div>
                     {actionMovePay === true && currentPlayer === getNickname() &&

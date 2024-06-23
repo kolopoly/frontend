@@ -28,7 +28,7 @@ const parserJson = (ruleData) => {
     const fieldsColors = fields.map(field => field.color);
     const fees = fields.map(fields => fields.fees);
     const sellPrice = fields.map(fields => fields.sell_price ?? 0);
-    const buyPrice = fields.map(fields => fields.buy_price);
+    const buyPrice = fields.map(fields => fields.escape_price != null ? fields.escape_price : fields.buy_price);
     const upgradePrice = fields.map(fields => fields.upgrade_price);
 
     return {field_amount, fieldNames, fieldTypes, fieldsColors, sellPrice, fees, buyPrice, upgradePrice};

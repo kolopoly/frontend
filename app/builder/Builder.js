@@ -14,6 +14,7 @@ const Builder = () => {
             name: 'sector',
             type: 'street',
             fees: [100, 50, 3, 4, 5, 6, 7, 8],
+            escape_price: '100'
         })
     }
     const [sectorProperties, setSectorProperties] = useState(x);
