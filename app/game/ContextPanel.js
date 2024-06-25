@@ -5,7 +5,7 @@ import {getNickname} from "../storage";
 import '../font.css';
 import RollButton from "./Buttons/RollButton";
 import PanelButtons from "./Buttons/PanelButtons";
-const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars, lastRolls, width, height,
+const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, playersAvatars, lastRolls, width, height,
                           currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex, rollDiceMove, trade, onTrade, tradeInfo}) => {
 
     const playersPanels = []
@@ -32,7 +32,6 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars
     const panelStyle = {
         display: 'flex', // use flexbox layout
         flexDirection: 'column', // stack children vertically
-        flexWrap: 'wrap', // allow wrapping of children if needed
         justifyContent: 'center', // center children along the main axis
         alignItems:'center',
         gap: '25px', // space between playersPanels
@@ -62,16 +61,23 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars
     console.log(currentPlayer, getNickname(), currentPlayer === getNickname())
     return (
         <div style={panelStyle}>
+            <div style={{textAlign: 'center', fontFamily: "'Aller', sans-serif", fontSize: '30px'}}>
+                <p>Game ID: {gameId}</p>
+            </div>
             {playersPanels}
             <div style={lowerButtons}>
-                <RollButton buttonHeight={height * 0.2} buttonWidth={width * 0.9}
-                    clickAction={rollDice} active={getNickname() === currentPlayer && rollDiceMove && tradeInfo.clicked === false} diceOne={lastRolls[0]} diceTwo={lastRolls[1]}/>
+                <RollButton buttonHeight={height * 0.15} buttonWidth={width * 0.9}
+                            clickAction={rollDice}
+                            active={getNickname() === currentPlayer && rollDiceMove && tradeInfo.clicked === false}
+                            diceOne={lastRolls[0]} diceTwo={lastRolls[1]}/>
                 <div style={rightColumn}>
                     {gameStarted === false &&
                         <PanelButtons buttonWidth={width * 0.3}
                                       buttonHeight={height * 0.3 * 0.2}
                                       active={true}
-                                      clickAction={() => {onStart()}}
+                                      clickAction={() => {
+                                          onStart()
+                                      }}
                                       buttonColour={'rgba(212,240,217,255)'}
                                       buttonText={"Start the Game"}/>
                     }
@@ -79,7 +85,9 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars
                         <PanelButtons buttonWidth={width * 0.3}
                                       buttonHeight={height * 0.3 * 0.2}
                                       active={endTurn === true && getNickname() === currentPlayer && tradeInfo.clicked === false}
-                                      clickAction={() => {onEndTurn()}}
+                                      clickAction={() => {
+                                          onEndTurn()
+                                      }}
                                       buttonColour={'rgba(212,240,217,255)'}
                                       buttonText={"End Turn"}/>
                     }
@@ -87,7 +95,9 @@ const ContextPanel = ({playersNumber, playersMoney, playersNames, playersAvatars
                         <PanelButtons buttonWidth={width * 0.3}
                                       buttonHeight={height * 0.3 * 0.2}
                                       active={giveUp === true && tradeInfo.clicked === false}
-                                      clickAction={() => {onGiveUp()}}
+                                      clickAction={() => {
+                                          onGiveUp()
+                                      }}
                                       buttonColour={'rgba(244,150,151,255)'}
                                       buttonText={"Give Up"}/>
                     }

@@ -417,6 +417,7 @@ const GameScreen = () => {
                 <View style={styles.container}>
                     <View style={styles.leftContainer}>
                         <ContextPanel
+                            gameId={state.game_id}
                             playersNumber={info.players.length}
                             playersMoney={info.playersMoney}
                             playersAvatar={[null, null, null, null]}
