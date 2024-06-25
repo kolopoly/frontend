@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { View, StyleSheet, TextInput, Button } from "react-native";
+import { View, StyleSheet, TextInput, Button, ImageBackground, TouchableOpacity, Text } from "react-native"; // Убедитесь, что Text импортирован из 'react-native'
 import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
 import {backend, wsbackend} from "../backend"
+const localImage = require('../../assets/MainBackground.jpeg');
 
 const useFetchRule = async (ruleId) => {
     try {
@@ -355,33 +356,39 @@ const GameScreen = () => {
 
     const renderInputScreen = () => {
         return (
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter Rule ID"
-                    value={textRuleID}
-                    onChangeText={handleRuleInputChange}
-                />
-                <Button
-                    title="Create Game"
-                    onPress={handleCreateGame}
-                />
-                <div style={{margin: '10px'}}></div>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter Game ID"
-                    value={text}
-                    onChangeText={handleInputChange}
-                />
-
-                <Button
-                    title="Join Game"
-                    onPress={startGame}
-                />
-
+            <View style={styles.inputScreenContainer}>
+                <ImageBackground
+                    source={localImage}
+                    style={styles.image}
+                    blurRadius={5}
+                    resizeMode="stretch"
+                >
+                    <View style={styles.contentContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter Rule ID"
+                            value={textRuleID}
+                            onChangeText={handleRuleInputChange}
+                        />
+                        <TouchableOpacity style={styles.button} onPress={handleCreateGame}>
+                            <Text style={styles.buttonText}>Create Game</Text>
+                        </TouchableOpacity>
+                        <View style={styles.spacer} />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Enter Game ID"
+                            value={text}
+                            onChangeText={handleInputChange}
+                        />
+                        <TouchableOpacity style={styles.button} onPress={startGame}>
+                            <Text style={styles.buttonText}>Join Game</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ImageBackground>
             </View>
         );
     };
+
 
     const renderGameContent = () => {
         let game_id = getGameId();
@@ -510,12 +517,65 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-        width: 200,
-        height: 40,
+        width: 250,
+        height: 50,
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 20,
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
+        backgroundColor: 'white',
+        borderRadius: 25,
+        fontSize: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    button: {
+        backgroundColor: '#007bff',
+        paddingVertical: 15,
+        paddingHorizontal: 25,
+        borderRadius: 25,
+        alignItems: 'center',
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
+        shadowRadius: 2,
+        elevation: 5,
+    },
+    buttonText: {
+        fontSize: 18,
+        color: '#fff',
+    },
+
+    inputScreenContainer: {
+        flex: 1,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        width: '100vw',
+        height: '100vh',
+    },
+    image: {
+        flex: 1,
+        resizeMode: 'cover',
+        justifyContent: 'center',
+        width: '100%',
+        height: '100%',
+    },
+    contentContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
+        margin: 20,
+        borderRadius: 20,
+    },
+    spacer: {
+        margin: 10,
     },
 });
 
