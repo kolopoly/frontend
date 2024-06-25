@@ -1,5 +1,4 @@
 import React from 'react';
-import Description from "./Description";
 import {getNickname} from "../storage";
 import {TextInput, View, Text} from "react-native";
 import placeholderItem from "react-native-draggable-flatlist/src/components/PlaceholderItem";
@@ -31,7 +30,6 @@ class SectorCard extends React.Component {
             textAlign: 'center',
             outlineStyle: 'none',
         };
-
         const titleField = {
             display: 'flex',
             justifyContent: 'center',
@@ -135,6 +133,11 @@ class SectorCard extends React.Component {
             updateSectorProperty(sectorId, "fees", property.fees)
         }
 
+        const onChangeEscapePrice = (value) => {
+            property.escape_price = value
+            updateSectorProperty(sectorId, "escape_price", property.escape_price)
+        }
+
         const rowStyle = {
             width: '100%',
             height: '20%',
@@ -207,7 +210,24 @@ class SectorCard extends React.Component {
                                     })}
                                 </div>
                             ))}
-                            {sectorName !== "start" && sectorName !== "prison"}
+
+                            {property.type === 'prison' &&
+                                <View style={{ alignItems: 'center', flex: 1, justifyContent: 'center'}}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                                        <Text style={feesStyle}>{"Escape Price"}</Text>
+                                        <TextInput
+                                            keyboardType="numeric"
+                                            onChangeText={(text) => onChangeEscapePrice(text)}
+                                            value={property.escape_price}
+                                            style={feesStyle}
+                                            maxLength={4}
+                                            caretHidden={false}
+                                            contextMenuHidden={true}
+                                            blurOnSubmit={true}
+                                        />
+                                    </View>
+                                </View>
+                            }
                         </div>
                     </div>
                     <select style={TypeSelector} value={property.type} onChange={

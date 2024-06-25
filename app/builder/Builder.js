@@ -14,6 +14,7 @@ const Builder = () => {
             name: 'sector',
             type: 'street',
             fees: [100, 50, 3, 4, 5, 6, 7, 8],
+            escape_price: '100'
         })
     }
     const [sectorProperties, setSectorProperties] = useState(x);
@@ -21,7 +22,16 @@ const Builder = () => {
 
     const clickCopy = async (rule_id) => {
         console.log(rules[rule_id])
-        setSectorProperties(rules[rule_id]["fields"])
+        let y = sectorProperties
+        for(let i = 0; i < rules[rule_id]["field_amount"]; i++){
+            let x = rules[rule_id]["fields"][i]
+            if(x["type"] === "prison" || x["type"] === "start"){
+                x["fees"] = [100, 50, 3, 4, 5, 6, 7, 8]
+            }
+            y[i] = x
+        }
+        setSectorProperties(y)
+        setValue(rules[rule_id]["field_amount"])
 
     }
 

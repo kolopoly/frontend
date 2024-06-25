@@ -8,17 +8,26 @@ import PayButton from "./Buttons/PayButton";
 class SectorCard extends React.Component {
 
     render() {
-        const { sectorColor, sectorName, sectorWidth, sectorHeight, sectorId,
+        const { sectorColor, sectorName, sectorType, sectorWidth, sectorHeight, sectorId,
                 actionMoveBuy, actionMoveSell, actionMoveUpgrade, actionMovePay, sellField, upgradeField, buyField, payField,
                 buyPrice, fees, sellPrice, upgradePrice, fieldLevel, currentPlayer
         } = this.props;
 
-        const contentHolder = {
+        let contentHolder = {
             width: sectorWidth * 1.4,
             height: sectorHeight * 1.57,
             justifyContent: 'start',
             display: 'flex',
             flexDirection: 'row',
+        }
+        if (sectorType !== 'street'){
+            contentHolder = {
+                width: sectorWidth * 1.4,
+                height: sectorHeight * 1.57,
+                justifyContent: 'center',
+                display: 'flex',
+                flexDirection: 'row',
+            }
         }
 
         const contentVerticalHolder = {
@@ -46,7 +55,7 @@ class SectorCard extends React.Component {
             boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
         };
 
-        const insideCard = {
+        let insideCard = {
             width: "85%",
             height: "90%",
             paddingLeft: "3px",
@@ -84,19 +93,27 @@ class SectorCard extends React.Component {
             backgroundColor: sectorColor, //change to actual color
         }
 
-        const descriptionContainerStyle = {
+        let descriptionContainerStyle = {
             display: 'flex',
             justifyContent: 'flex-start', // Align to the start (left side)
             width: '100%', // Ensure it takes up full width of the parent
         };
+        if (sectorType === 'prison'){
+            descriptionContainerStyle = {
+                ...descriptionContainerStyle,
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }
+        }
 
         console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
             <div style={contentHolder}>
-                <BuyButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                {sectorType === 'street' && <BuyButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
                     active={(actionMoveBuy || actionMoveUpgrade) && currentPlayer === getNickname()}
                     clickAction={actionMoveBuy === true ? () => {buyField()} : () => {upgradeField(sectorId)}}>
-                </BuyButton>
+                </BuyButton> }
                 <div style={contentVerticalHolder}>
                     <div style={cardStyle}>
                         <div style={insideCard}>
@@ -104,18 +121,18 @@ class SectorCard extends React.Component {
                                 <div style={nameStyle}>{sectorName}
                                 </div>
                             </div>
-                            {sectorName !== "Start" && sectorName !== "Prison" &&
-                                <div style={descriptionContainerStyle}> <Description buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
+                            {(sectorType === 'street' || sectorType === 'prison') &&
+                                <div style={descriptionContainerStyle}> <Description fieldType={sectorType} buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         </div>
                     </div>
                     {actionMovePay === true && currentPlayer === getNickname() &&
                         <PayButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
-                                   clickAction={() => {payField()}}/>}
+                                   clickAction={() => {payField()}} payButtonText={sectorType === 'street' ? 'Pay Rent' : sectorType === 'prison' ? 'Pay to Escape' : 'undefined'}/>}
                 </div>
-                <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                {sectorType === 'street' && <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
                             active={(actionMoveSell) && currentPlayer === getNickname()}
                             clickAction={actionMoveSell === true ? () => {sellField(sectorId)} : null}>
-                </SellButton>
+                </SellButton>}
             </div>
         );
     }

@@ -125,6 +125,8 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
             "start_balance": 500,
             "fields": []
         }
+        let start = 0;
+        let prison = 0;
         for (let i = 0; i < num; i++) {
             let field_data = {
                 "name": prop[i].name,
@@ -136,11 +138,21 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
                 field_data["buy_price"] = prop[i].fees[0]
                 field_data["upgrade_price"] = prop[i].fees[1]
             } else if(prop[i].type === "start"){
+                start += 1;
                 field_data["add_to_balance"] = 50
             } else if(prop[i].type === "prison"){
-                field_data["escape_price"] = 20
+                prison += 1;
+                field_data["escape_price"] = prop[i].escape_price
             }
             json.fields.push(field_data)
+        }
+        if(start !== 1){
+            toast("There is should be exactly one start")
+            return
+        }
+        if(prison !== 1){
+            toast("There is should be exactly one prison")
+            return
         }
         console.log(json)
         try {
@@ -152,7 +164,6 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
                 },
                 body: JSON.stringify(json)
             });
-            console.log(`${backend}/save_rules`)
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
