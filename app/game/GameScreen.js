@@ -4,6 +4,7 @@ import GameRing from './GameRing';
 import ContextPanel from "./ContextPanel";
 import {getGameId, getNickname, setGameId} from "../storage";
 import {backend, wsbackend} from "../backend"
+import WinnerPanel from "./WinnerPanel";
 const localImage = require('../../assets/MainBackground.jpeg');
 
 const useFetchRule = async (gameId) => {
@@ -88,6 +89,8 @@ const parseJsonPlayers = (gameData, field_amount) => {
 
 const GameScreen = () => {
     const audioRef = useRef(null);
+    const [winner, setWinner] = useState(null);
+
     const [state, setState] = useState({
         game_id: null,
         isGameStarted: false,
@@ -314,6 +317,10 @@ const GameScreen = () => {
                        sell_price: state.sell_price,
                    })
                 }
+                console.log(data['winner'])
+                if(data['winner'] !== -1){
+                    setWinner(data['winner']);
+                }
             };
 
             ws.onclose = () => {
@@ -389,6 +396,12 @@ const GameScreen = () => {
         );
     };
 
+    let container ={
+        flex: 1,
+        flexDirection: "row",
+        backgroundColor: "rgba(191,230,196,255)",
+    }
+
 
     const renderGameContent = () => {
         let game_id = getGameId();
@@ -414,7 +427,8 @@ const GameScreen = () => {
         console.log(info.players.length)
         return (
             <div style={styles.globalContainer}>
-                <View style={styles.container}>
+                <WinnerPanel winner={winner} lost={winner != null && winner.toString() !== getNickname()} />
+                <View style={container}>
                     <View style={styles.leftContainer}>
                         <ContextPanel
                             gameId={state.game_id}
@@ -486,11 +500,6 @@ const GameScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: "row",
-        backgroundColor: "rgba(191,230,196,255)",
-    },
     globalContainer: {
         width: window.innerWidth,
         height: window.innerHeight,
