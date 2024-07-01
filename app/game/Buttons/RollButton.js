@@ -10,14 +10,14 @@ const DiceImages = [
     require('../../../assets/dice/dice0006.png'),
 ];
 
-const RollButton = ({ buttonWidth, buttonHeight, active, clickAction, diceOne, diceTwo }) => {
+const RollButton = ({ buttonWidth, scale,  buttonHeight, active, clickAction, diceOne, diceTwo }) => {
     const [isActive, setIsActive] = useState(false);
     const [rolling, setRolling] = useState(false);
 
     const rotationOne = useRef(new Animated.Value(0)).current;
     const rotationTwo = useRef(new Animated.Value(0)).current;
-    const positionOne = useRef(new Animated.ValueXY({ x: 50, y: 0 })).current;
-    const positionTwo = useRef(new Animated.ValueXY({ x: -50, y: 0 })).current;
+    const positionOne = useRef(new Animated.ValueXY({ x: 50 * scale, y: 0 })).current;
+    const positionTwo = useRef(new Animated.ValueXY({ x: -50 * scale, y: 0 })).current;
     const [currentDiceOne, setCurrentDiceOne] = useState(diceOne);
     const [currentDiceTwo, setCurrentDiceTwo] = useState(diceTwo);
 
@@ -31,17 +31,17 @@ const RollButton = ({ buttonWidth, buttonHeight, active, clickAction, diceOne, d
         width: buttonWidth,
         height: buttonHeight,
         backgroundColor: active === true ? 'rgba(212,240,217,255)' : 'gray',
-        borderBottomRightRadius: '20px',
-        borderBottomLeftRadius: '20px',
-        borderTopRightRadius: '20px',
-        borderTopLeftRadius: '20px',
-        padding: '5px',
+        borderBottomRightRadius: `${scale * 20}px`,
+        borderBottomLeftRadius: `${scale * 20}px`,
+        borderTopRightRadius: `${scale * 20}px`,
+        borderTopLeftRadius: `${scale * 20}px`,
+        padding: `${scale * 5}px`,
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '10px',
+        gap: `${scale * 20}px`,
         webkitBoxShadow: '9px 8px 0px 2px rgba(162, 195, 166, 1)',
         boxShadow: '9px 8px 0px 2px rgba(162, 195, 166, 1)',
         border: 'none',
@@ -57,14 +57,14 @@ const RollButton = ({ buttonWidth, buttonHeight, active, clickAction, diceOne, d
 
     const imageStyleOne = {
         position: 'absolute',
-        width: buttonWidth * 0.15,
-        height: buttonWidth * 0.15,
+        width: buttonHeight * 0.4,
+        height: buttonHeight * 0.4,
     };
 
     const imageStyleTwo = {
         position: 'absolute',
-        width: buttonWidth * 0.15,
-        height: buttonWidth * 0.15,
+        width: buttonHeight * 0.4,
+        height: buttonHeight * 0.4,
     };
 
     let buttonStyle;
@@ -78,22 +78,22 @@ const RollButton = ({ buttonWidth, buttonHeight, active, clickAction, diceOne, d
     const rollDiceWithAnimation = () => {
         if (active) {
             setRolling(true);
-            const x1 = (Math.random() - 0.5) * 50 + 30;
+            const x1 = ((Math.random() - 0.5) * 50 + 30) * scale;
             const x2 = -x1;
-            const y1 = Math.random() * 20 + 25;
+            const y1 = (Math.random() * 20 + 25) * scale;
             const y2 = -y1;
             const randomPositionOne = { x: x1, y: y1 };
             const randomPositionTwo = { x: x2, y: y2 };
 
             Animated.parallel([
                 Animated.timing(rotationOne, {
-                    toValue: 1,
+                    toValue: 1 * scale,
                     duration: 1000,
                     easing: Easing.linear,
                     useNativeDriver: true,
                 }),
                 Animated.timing(rotationTwo, {
-                    toValue: 1,
+                    toValue: 1 * scale,
                     duration: 1000,
                     easing: Easing.linear,
                     useNativeDriver: true,
@@ -113,8 +113,8 @@ const RollButton = ({ buttonWidth, buttonHeight, active, clickAction, diceOne, d
             ]).start(() => {
                 rotationOne.setValue(0);
                 rotationTwo.setValue(0);
-                positionOne.setValue({ x: -50, y: 0 });
-                positionTwo.setValue({ x: 50, y: 0 });
+                positionOne.setValue({ x: -50 * scale, y: 0 });
+                positionTwo.setValue({ x: 50 * scale, y: 0 });
                 setCurrentDiceOne(diceOne);
                 setCurrentDiceTwo(diceTwo);
                 setRolling(false);

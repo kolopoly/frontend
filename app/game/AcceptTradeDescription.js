@@ -3,12 +3,13 @@ import '../font.css';
 class Description extends React.Component {
 
     render() {
-        const { amount1, amount2 } = this.props;
+        const { amount1, amount2, scale } = this.props;
 
         const descriptionStyle = {
             fontFamily: "'Aller', sans-serif",
-            marginLeft: '5px',
-            marginRight: '5px',
+            fontSize: `${scale * 20}px`,
+            marginLeft: `${scale * 5}px`,
+            marginRight: `${scale * 5}px`,
         };
 
         const centeredText = {

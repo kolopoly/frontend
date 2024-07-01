@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../font.css"
 
-const SellButton = ({sectorWidth, sectorHeight, active, clickAction}) => {
+const SellButton = ({sectorWidth, scale, sectorHeight, active, clickAction}) => {
 
     const [isPressed, setIsPressed] = useState(false);
 
@@ -11,13 +11,13 @@ const SellButton = ({sectorWidth, sectorHeight, active, clickAction}) => {
         height: "15%",
         marginTop: sectorHeight * 1.37 * 0.2,
         backgroundColor: active === true ? 'rgba(255,105,98,255)' : 'gray',
-        borderTopRightRadius: '10px',
-        borderBottomRightRadius: '10px',
+        borderTopRightRadius: `${scale * 10}px`,
+        borderBottomRightRadius: `${scale * 10}px`,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: '1',
-        boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+        boxShadow: `rgba(0, 0, 0, 0.19) 0px ${scale * 10}px ${scale * 20}px, rgba(0, 0, 0, 0.23) 0px ${scale * 6}px ${scale * 6}px`,
         border: "0px",
         cursor: active === true ? 'pointer' : '',
         transition: 'background-color 0.2s',
@@ -26,7 +26,7 @@ const SellButton = ({sectorWidth, sectorHeight, active, clickAction}) => {
     const pressedStyle = {
         ...defaultStyle,
         backgroundColor: 'rgba(255,105,98,0.8)',
-        boxShadow: "rgba(0, 0, 0, 0.1) 0px 5px 10px, rgba(0, 0, 0, 0.1) 0px 3px 3px",
+        boxShadow: `rgba(0, 0, 0, 0.1) 0px ${scale * 5}px ${scale * 1}px, rgba(0, 0, 0, 0.1) 0px ${scale * 3}px ${scale * 3}px`,
     };
 
     const textStyle = {

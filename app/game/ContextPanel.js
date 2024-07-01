@@ -5,7 +5,7 @@ import {getNickname} from "../storage";
 import '../font.css';
 import RollButton from "./Buttons/RollButton";
 import PanelButtons from "./Buttons/PanelButtons";
-const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, playersAvatars, lastRolls, width, height,
+const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, playersAvatars, lastRolls, width, height, scale,
                           currentPlayer, gameStarted, onStart, rollDice, endTurn, onEndTurn, onGiveUp, giveUp, currentPlayerIndex, rollDiceMove, trade, onTrade, tradeInfo}) => {
 
     const playersPanels = []
@@ -14,6 +14,7 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
        playersPanels.push(
            <div>
                <PlayersPanel playersNumber={i}
+                             scale={scale}
                              playersName={playersNames[i]}
                              playersAvatar={playersAvatars != null ? playersAvatars[i] : null}
                              playersMoney={playersMoney[i]} width={width} height={height / 7}
@@ -34,7 +35,7 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
         flexDirection: 'column', // stack children vertically
         justifyContent: 'center', // center children along the main axis
         alignItems:'center',
-        gap: '25px', // space between playersPanels
+        gap: `${25 * scale}px`, // space between playersPanels
         width: width,
         height: height,
         backgroundColor: 'transparent'
@@ -46,7 +47,7 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: '10px',
+        gap: `${10 * scale}px`,
     }
 
     const rightColumn = {
@@ -55,18 +56,18 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '10px',
+        gap: `${10 * scale}px`,
     }
 
     console.log(currentPlayer, getNickname(), currentPlayer === getNickname())
     return (
         <div style={panelStyle}>
-            <div style={{textAlign: 'center', fontFamily: "'Aller', sans-serif", fontSize: '30px'}}>
+            <div style={{textAlign: 'center', fontFamily: "'Aller', sans-serif", fontSize: `${scale * 30}px`}}>
                 <p>Game ID: {gameId}</p>
             </div>
             {playersPanels}
             <div style={lowerButtons}>
-                <RollButton buttonHeight={height * 0.15} buttonWidth={width * 0.9}
+                <RollButton buttonHeight={height * 0.15} buttonWidth={width * 0.9} scale={scale}
                             clickAction={rollDice}
                             active={getNickname() === currentPlayer && rollDiceMove && tradeInfo.clicked === false}
                             diceOne={lastRolls[0]} diceTwo={lastRolls[1]}/>
@@ -74,6 +75,7 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
                     {gameStarted === false &&
                         <PanelButtons buttonWidth={width * 0.3}
                                       buttonHeight={height * 0.3 * 0.2}
+                                      scale={scale}
                                       active={true}
                                       clickAction={() => {
                                           onStart()
@@ -88,12 +90,14 @@ const ContextPanel = ({gameId, playersNumber, playersMoney, playersNames, player
                                       clickAction={() => {
                                           onEndTurn()
                                       }}
+                                      scale={scale}
                                       buttonColour={'rgba(212,240,217,255)'}
                                       buttonText={"End Turn"}/>
                     }
                     {gameStarted === true &&
                         <PanelButtons buttonWidth={width * 0.3}
                                       buttonHeight={height * 0.3 * 0.2}
+                                      scale={scale}
                                       active={giveUp === true && tradeInfo.clicked === false}
                                       clickAction={() => {
                                           onGiveUp()

@@ -87,7 +87,7 @@ const parseJsonPlayers = (gameData, field_amount) => {
 
 }
 
-const GameScreen = () => {
+const GameScreen = ({width, height, scale}) => {
     const audioRef = useRef(null);
     const [winner, setWinner] = useState(null);
 
@@ -363,32 +363,32 @@ const GameScreen = () => {
 
     const renderInputScreen = () => {
         return (
-            <View style={styles.inputScreenContainer}>
+            <View style={[styles.inputScreenContainer, {width: width, height: height}]}>
                 <ImageBackground
                     source={localImage}
                     style={styles.image}
                     blurRadius={5}
                     resizeMode="stretch"
                 >
-                    <View style={styles.contentContainer}>
+                    <View style={[styles.contentContainer, {padding: 20 * scale, margin: 20 * scale, borderRadius: 20 * scale}]}>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, {width: 250 * scale, height: 50 * scale, marginBottom: 20 * scale, paddingHorizontal: 20 * scale, borderRadius: 25 * scale, fontSize: 16 * scale, }]}
                             placeholder="Enter Rule ID"
                             value={textRuleID}
                             onChangeText={handleRuleInputChange}
                         />
-                        <TouchableOpacity style={styles.button} onPress={handleCreateGame}>
-                            <Text style={styles.buttonText}>Create Game</Text>
+                        <TouchableOpacity style={[styles.button, {paddingVertical: 15 * scale, paddingHorizontal: 25 * scale, borderRadius: 25 * scale, marginBottom: 28 * scale}]} onPress={handleCreateGame}>
+                            <Text style={[styles.buttonText, { fontSize: 18 * scale}]}>Create Game</Text>
                         </TouchableOpacity>
-                        <View style={styles.spacer} />
+                        <View style={{margin: 10 * scale}} />
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, {width: 250 * scale, height: 50 * scale, marginBottom: 20 * scale, paddingHorizontal: 20 * scale, borderRadius: 25 * scale, fontSize: 16 * scale, }]}
                             placeholder="Enter Game ID"
                             value={text}
                             onChangeText={handleInputChange}
                         />
-                        <TouchableOpacity style={styles.button} onPress={startGame}>
-                            <Text style={styles.buttonText}>Join Game</Text>
+                        <TouchableOpacity style={[styles.button, {paddingVertical: 15 * scale, paddingHorizontal: 25 * scale, borderRadius: 25 * scale, marginBottom: 28 * scale}]} onPress={startGame}>
+                            <Text style={[styles.buttonText, { fontSize: 18 * scale}]}>Join Game</Text>
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
@@ -402,6 +402,12 @@ const GameScreen = () => {
         backgroundColor: "rgba(191,230,196,255)",
     }
 
+    let  globalContainer= {
+        backgroundColor: "rgba(191,230,196,255)",
+        alignItems: "center",
+        width: width,
+        height: height,
+    }
 
     const renderGameContent = () => {
         let game_id = getGameId();
@@ -426,18 +432,19 @@ const GameScreen = () => {
         const info = parseJsonPlayers(message, state.field_number)
         console.log(info.players.length)
         return (
-            <div style={styles.globalContainer}>
-                <WinnerPanel winner={winner} lost={winner != null && winner.toString() !== getNickname()} />
+            <div style={globalContainer}>
+                <WinnerPanel winner={winner} lost={winner != null && winner.toString() !== getNickname()} scale={scale}/>
                 <View style={container}>
-                    <View style={styles.leftContainer}>
+                    <View style={[styles.leftContainer, {paddingLeft: 10 * scale, marginRight: 40 * scale}]}>
                         <ContextPanel
                             gameId={state.game_id}
                             playersNumber={info.players.length}
                             playersMoney={info.playersMoney}
                             playersAvatar={[null, null, null, null]}
                             playersNames={info.players}
-                            width={window.innerWidth * 0.3}
-                            height={window.innerHeight}
+                            width={width * 0.3}
+                            height={height}
+                            scale={scale}
                             lastRolls={info.lastRolls}
                             currentPlayer={info.activePlayer}
                             currentPlayerIndex={info.activePlayerIndex}
@@ -456,7 +463,8 @@ const GameScreen = () => {
                     </View>
                     <View style={styles.rightContainer}>
                         {state.isGameStartedByHost && <GameRing
-                            radius={window.innerHeight * 0.4}
+                            radius={width * 0.25}
+                            scale={scale}
                             numSectors={state.field_number}
                             playersNumber={info.players.length}
                             playersPositions={info.playersPositions}
@@ -501,8 +509,6 @@ const GameScreen = () => {
 
 const styles = StyleSheet.create({
     globalContainer: {
-        width: window.innerWidth,
-        height: window.innerHeight,
         backgroundColor: "rgba(191,230,196,255)",
         alignItems: "center",
     },
@@ -512,8 +518,6 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
         alignItems: "center",
-        paddingLeft: 10,
-        marginRight: 40,
     },
     rightContainer: {
         flex: 1,
@@ -527,15 +531,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
-        width: 250,
-        height: 50,
         borderColor: 'gray',
         borderWidth: 1,
-        marginBottom: 20,
-        paddingHorizontal: 15,
         backgroundColor: 'white',
-        borderRadius: 25,
-        fontSize: 16,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -544,11 +542,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#007bff',
-        paddingVertical: 15,
-        paddingHorizontal: 25,
-        borderRadius: 25,
         alignItems: 'center',
-        marginBottom: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -556,7 +550,6 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     buttonText: {
-        fontSize: 18,
         color: '#fff',
     },
 
@@ -565,8 +558,6 @@ const styles = StyleSheet.create({
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh',
     },
     image: {
         flex: 1,
@@ -579,10 +570,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent background
-        margin: 20,
-        borderRadius: 20,
     },
     spacer: {
         margin: 10,

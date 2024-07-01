@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Circle from './PlayerCircles';
 import './ring.css';
 import SectorCard from "./SectorCard";
 import {getNickname} from "../storage";
@@ -30,12 +29,12 @@ class GameRing extends React.Component {
 
 
 
-    addingPlayers(currentSector, playersNumber, playersPositions, playersAvatars){
+    addingPlayers(currentSector, playersNumber, playersPositions, playersAvatars, scale){
         const playersCircles = []
         const avatarStyle = {
-            width: '50px',
-            height: '50px',
-            marginRight: '30px',
+            width: `${scale * 50}px`,
+            height: `${scale * 50}px`,
+            marginRight: `${scale * 50}px`,
         }
         for (let i = 0; i < playersNumber; i++) {
             if (playersPositions[i] === currentSector) {
@@ -50,7 +49,7 @@ class GameRing extends React.Component {
                 justifyContent: 'center'
             }}>
                 {playersCircles.map((circle, index) => (
-                    <div key={index} style={{ flex: '1 0 50%', maxWidth: '50%', boxSizing: 'border-box', padding: '5px' }}>
+                    <div key={index} style={{ flex: '1 0 50%', maxWidth: '50%', boxSizing: 'border-box', padding: `${scale * 5}px` }}>
                         {circle}
                     </div>
                 ))}
@@ -59,7 +58,7 @@ class GameRing extends React.Component {
     }
 
     render() {
-        const { radius, numSectors, playersNumber, playersPositions, playersAvatars, sectorColours, sectorNames, sectorTypes,
+        const { radius, numSectors, playersNumber, playersPositions, playersAvatars, sectorColours, sectorNames, sectorTypes, scale,
             buyField, upgradeField, sellField, actionMoveBuy, actionMovesSell, actionMoveUpgrade, actionMovePay, acceptTrade, acceptTradeTrade,
             currentPlayer, payField, fees, fieldLevels, buyPrice, sellPrice, upgradePrice, currentPlayerIndex, fieldOwners, trade, tradeInfo, playerNames, playersMoney, onTrade, sendTrade, sendAccept
         } = this.props;
@@ -97,7 +96,7 @@ class GameRing extends React.Component {
                 borderTop: `${sectorHeight * 0.05}px solid ${fieldOwners[i] !== -1 ? this.playersColors[fieldOwners[i]] : 'rgba(136,171,150,255)'}`,
                 borderBottom: `${sectorHeight * 0.2}px solid ${sectorColours[i]}`,
                 textAlign: 'center',
-                lineHeight: '30px',
+                lineHeight: `${scale * 30}px`,
                 cursor: 'pointer',
                 clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)'
             };
@@ -114,7 +113,7 @@ class GameRing extends React.Component {
                     transform: 'translateX(-50%)',
                     width: `${sectorWidth}px`,
                     height: `${sectorHeight}px`,
-                    lineHeight: '30px',
+                    lineHeight: `${scale * 30}px`,
                     clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)',
                     border: '4px solid white',
                     backgroundColor: 'rgb(255,255,255,0.8)',
@@ -124,7 +123,7 @@ class GameRing extends React.Component {
             console.log("FIELD ACCEPT", acceptTradeTrade)
             sectorButtons.push(
                 <div key={i} style={sectorStyle}>
-                    {sectorTypes[i] === 'street' && <UpgradesBlock width={sectorWidth} height={sectorHeight} fees={fees[i]} fieldLevel={fieldLevels[i]}/> }
+                    {sectorTypes[i] === 'street' && <UpgradesBlock width={sectorWidth} height={sectorHeight} scale={scale} fees={fees[i]} fieldLevel={fieldLevels[i]}/> }
                     <button
                         style={buttonStyle}
                         onClick={() => {
@@ -165,7 +164,7 @@ class GameRing extends React.Component {
                             transform: 'translateX(-50%)',
                             textAlign: 'center',
                             marginTop: '1px',
-                        }}>{this.addingPlayers(i, playersNumber, playersPositions, playersAvatars != null ? playersAvatars : null)}</div>
+                        }}>{this.addingPlayers(i, playersNumber, playersPositions, playersAvatars != null ? playersAvatars : null, scale)}</div>
                         <div style={{
                             fontFamily: "'Aller', sans-serif",
                             position: 'absolute',
@@ -175,7 +174,7 @@ class GameRing extends React.Component {
                             transform: 'translate(-50%, 0)',
                             textAlign: 'center',
                             fontSize: '90%',
-                            lineHeight: '15px',
+                            lineHeight: `${scale * 15}px`,
                             marginTop: `${sectorHeight * 0.5}px`,
                             backgroundColor: 'rgba(255, 255, 255, 0)', // Optional: Set a background color if needed to cover the border
                             zIndex: '10' // Ensure the zIndex is higher than the button's border
@@ -196,6 +195,7 @@ class GameRing extends React.Component {
                                 sectorType={sectorTypes[this.state.selectedSector]}
                                 sectorWidth={radius - sectorHeight * 1.15}
                                 sectorHeight={sectorHeight * 1.3}
+                                scale={scale}
                                 actionMoveBuy={this.state.selectedSector === playersPositions[currentPlayerIndex] && (actionMoveBuy === null ? false : actionMoveBuy) && getNickname() === currentPlayer}
                                 actionMoveSell={actionMovesSell != null ? actionMovesSell[this.state.selectedSector][0] : false}
                                 actionMoveUpgrade={actionMoveUpgrade != null ? actionMoveUpgrade[this.state.selectedSector][0] : false}
@@ -218,6 +218,7 @@ class GameRing extends React.Component {
                         sectorName={"Trade with " + playerNames[tradeInfo.with]}
                         sectorWidth={radius - sectorHeight * 1.15}
                         sectorHeight={sectorHeight * 1.3}
+                        scale={scale}
                         currentPlayer={currentPlayer}
                         currentPlayerIndex={currentPlayerIndex}
                         tradeInfo={tradeInfo}
@@ -234,6 +235,7 @@ class GameRing extends React.Component {
                                      tradeInfo={acceptTradeTrade}
                                      sectorName={"Trade with " + acceptTradeTrade.player_id1}
                                      sectorWidth={radius - sectorHeight * 1.15}
+                                     scale={scale}
                                      sectorHeight={sectorHeight * 1.3}
                                      currentPlayer={currentPlayer}
                                      currentPlayerIndex={currentPlayerIndex}
