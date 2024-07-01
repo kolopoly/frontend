@@ -7,9 +7,9 @@ import {backend, wsbackend} from "../backend"
 import WinnerPanel from "./WinnerPanel";
 const localImage = require('../../assets/MainBackground.jpeg');
 
-const useFetchRule = async (ruleId) => {
+const useFetchRule = async (gameId) => {
     try {
-        const response = await fetch(`${backend}/get_rule/${ruleId}`);
+        const response = await fetch(`${backend}/get_rule_by_game_id/${gameId}`);
         console.log(response)
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -341,7 +341,7 @@ const GameScreen = ({width, height, scale}) => {
 
     const startGame = async () => {
         console.log("Game ID:", text);
-        const ruleData = await useFetchRule(textRuleID);
+        const ruleData = await useFetchRule(text);
         const result = parserJson(ruleData);
 
         setState({
