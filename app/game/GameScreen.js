@@ -327,6 +327,7 @@ const GameScreen = ({width, height, scale}) => {
             ws.onclose = () => {
                 console.log('WebSocket closed');
                 if(state.isGameStarted && state.game_id !== socketID) {
+                    setSocketID(0)
                     setRetr(retr + 1)
                     console.error('Retry to connect:', retr);
                 }
@@ -335,6 +336,7 @@ const GameScreen = ({width, height, scale}) => {
             ws.onerror = (error) => {
                 console.error('WebSocket error:', error);
                 if(state.isGameStarted && state.game_id !== socketID) {
+                    setSocketID(0)
                     setRetr(retr + 1)
                     console.error('Retry to connect:', retr);
                 }
