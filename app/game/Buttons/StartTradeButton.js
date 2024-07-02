@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "../../font.css"
 
-const StartTradeButton = ({ sectorWidth, sectorHeight, active, clickAction }) => {
+const StartTradeButton = ({ sectorWidth, scale, sectorHeight, active, clickAction }) => {
 
     const [isPressed, setIsPressed] = useState(false);
 
@@ -10,8 +10,8 @@ const StartTradeButton = ({ sectorWidth, sectorHeight, active, clickAction }) =>
         width: "10%",
         height: "70%",
         backgroundColor: active === true ? 'rgba(180,240,217,255)' : 'gray',
-        borderTopRightRadius: '10px',
-        borderBottomRightRadius: '10px',
+        borderTopRightRadius: `${scale * 10}px`,
+        borderBottomRightRadius: `${scale * 10}px`,
         justifyContent: 'center',
         display: 'flex',
         flexDirection: 'center',
@@ -32,7 +32,7 @@ const StartTradeButton = ({ sectorWidth, sectorHeight, active, clickAction }) =>
     };
 
     const textStyle = {
-        fontSize: `20px`,
+        fontSize: `${scale * 20}px`,
         fontFamily: "'Aller', sans-serif",
         color: "black",
         transform: "rotate(90deg)",

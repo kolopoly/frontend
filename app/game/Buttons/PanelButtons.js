@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../../font.css';
 import { Image } from 'react-native';
 
-const RollButton = ({buttonWidth, buttonHeight, active, clickAction, buttonColour, buttonText}) => {
+const RollButton = ({buttonWidth, scale, buttonHeight, active, clickAction, buttonColour, buttonText}) => {
     const [isActive, setIsActive] = useState(false);
 
     const ButtonStyle = {
@@ -10,17 +10,17 @@ const RollButton = ({buttonWidth, buttonHeight, active, clickAction, buttonColou
         width: buttonWidth,
         height: buttonHeight,
         backgroundColor: active === true ? buttonColour : 'gray',
-        borderBottomRightRadius: '5px',
-        borderBottomLeftRadius: '5px',
-        borderTopRightRadius: '5px',
-        borderTopLeftRadius: '5px',
-        padding: '5px',
+        borderBottomRightRadius: `${scale * 5}px`,
+        borderBottomLeftRadius: `${scale * 5}px`,
+        borderTopRightRadius: `${scale * 5}px`,
+        borderTopLeftRadius: `${scale * 5}px`,
+        padding: `${scale * 5}px`,
         display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '10px',
+        gap: `${scale * 10}px`,
         webkitBoxShadow: '5px 4px 0px 2px rgba(162, 195, 166, 1)',
         boxShadow: '5px 4px 0px 2px rgba(162, 195, 166, 1)',
         border: 'none',
@@ -35,7 +35,7 @@ const RollButton = ({buttonWidth, buttonHeight, active, clickAction, buttonColou
     };
 
     const textStyle = {
-        fontSize: buttonText.toString().length < 10 ? buttonWidth * 0.15 :  buttonWidth * 0.1,
+        fontSize: buttonText.toString().length < 10 ? buttonWidth * 0.15 * scale :  buttonWidth * 0.1 * scale,
         fontFamily: "'Aller', sans-serif",
         color: "black",
     }

@@ -3,7 +3,7 @@ import '../font.css';
 
 class UpgradeBlock extends React.Component {
     render() {
-        const { width, height, fees, fieldLevel } = this.props;
+        const { width, height, fees, scale,  fieldLevel } = this.props;
 
         const topBlockStyle = {
             position: 'absolute',
@@ -12,8 +12,8 @@ class UpgradeBlock extends React.Component {
             height: `${height * 0.25}px`, // Adjust this value based on your design requirements
             left: '50%',
             transform: 'translateX(-50%)',
-            lineHeight: '20px', // Match the height for central alignment
-            paddingLeft: '10px',
+            lineHeight: `${scale * 20}px`, // Match the height for central alignment
+            paddingLeft: `${scale * 10}px`,
         };
 
         const len = fees != null ? fees.slice(1).length : 1;
@@ -23,7 +23,7 @@ class UpgradeBlock extends React.Component {
             width: `${width * 0.9 * 0.8 / (len - 2)}px`, // Width of the green block
             height: '100%',
             backgroundColor: 'rgba(116,236,21,255)',
-            marginRight: '5px',
+            marginRight: `${scale * 5}px`,
         };
 
         const redBlockStyle = {
@@ -31,7 +31,7 @@ class UpgradeBlock extends React.Component {
             width: `${width * 0.9 * 0.8}px`, // Width of the green block
             height: '100%',
             backgroundColor: 'rgba(237,93,32,255)',
-            marginRight: '5px',
+            marginRight: `${scale * 5}px`,
         };
 
         return (

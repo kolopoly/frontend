@@ -4,7 +4,7 @@ import BuilderRing from './BuilderRing';
 import CardPanel from './CardPanel';
 import {backend} from "../backend";
 
-const Builder = () => {
+const Builder = ({width, height, scale}) => {
 
     const [rules, setRules] = useState(null);
     let x = []
@@ -62,13 +62,12 @@ const Builder = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.leftContainer}>
-
-                    <CardPanel clickCopy={clickCopy} amount={rules == null ? 0 : rules.length}/>
+            <View style={[styles.leftContainer, {paddingLeft: 10 * scale, marginRight: 40 * scale}]}>
+                    <CardPanel clickCopy={clickCopy} scale={scale} amount={rules == null ? 0 : rules.length}/>
             </View>
 
             <View style={styles.rightContainer}>
-                <BuilderRing radius={350} updateSectorProperty={updateSectorProperty} sectorProperties={sectorProperties} setSectorProperties={setSectorProperties} numSectors={numSectors} setValue={setValue}/>
+                <BuilderRing radius={350 * scale} scale={scale} updateSectorProperty={updateSectorProperty} sectorProperties={sectorProperties} setSectorProperties={setSectorProperties} numSectors={numSectors} setValue={setValue}/>
                 </View>
             </View>
         );
@@ -87,8 +86,6 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(191,230,196,255)",
         justifyContent: 'center',
         alignItems: "center",
-        paddingLeft: 10,
-        marginRight: 40,
     },
     rightContainer: {
         flex: 1,
@@ -100,14 +97,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    input: {
-        width: 200,
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 20,
-        paddingHorizontal: 10,
     },
     slider: {
         width: '50%', // Set the width to 50% of the parent container

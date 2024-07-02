@@ -8,7 +8,7 @@ import PayButton from "./Buttons/PayButton";
 class SectorCard extends React.Component {
 
     render() {
-        const { sectorColor, sectorName, sectorType, sectorWidth, sectorHeight, sectorId,
+        const { sectorColor, sectorName, sectorType, sectorWidth, sectorHeight, sectorId, scale,
                 actionMoveBuy, actionMoveSell, actionMoveUpgrade, actionMovePay, sellField, upgradeField, buyField, payField,
                 buyPrice, fees, sellPrice, upgradePrice, fieldLevel, currentPlayer
         } = this.props;
@@ -52,18 +52,18 @@ class SectorCard extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: '2',
-            boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+            boxShadow: `rgba(0, 0, 0, 0.19) 0px ${scale * 10}px ${scale * 2}px, rgba(0, 0, 0, 0.23) 0px ${scale * 6}px ${scale * 6}px`,
         };
 
         let insideCard = {
             width: "85%",
             height: "90%",
-            paddingLeft: "3px",
-            paddingRight: "3px",
+            paddingLeft: `${scale * 3}px`,
+            paddingRight: `${scale * 3}px`,
             backgroundColor: 'white',
             display: 'flex',
             flexDirection: 'column',
-            paddingTop: "7px",
+            paddingTop: `${scale * 7}px`,
             justifyContent: 'space-between',
             borderTopRightRadius: '8%',
             borderTopLeftRadius: '8%',
@@ -86,10 +86,10 @@ class SectorCard extends React.Component {
             alignItems: 'center',
             width: "93%",
             height: "20%",
-            borderTopRightRadius: '15px',
-            borderTopLeftRadius: '15px',
-            borderBottomLeftRadius: '15px',
-            borderBottomRightRadius: '15px',
+            borderTopRightRadius: `${scale * 15}px`,
+            borderTopLeftRadius: `${scale * 15}px`,
+            borderBottomLeftRadius: `${scale * 15}px`,
+            borderBottomRightRadius: `${scale * 15}px`,
             backgroundColor: sectorColor, //change to actual color
         }
 
@@ -110,7 +110,7 @@ class SectorCard extends React.Component {
         console.log(actionMoveUpgrade, currentPlayer === getNickname())
         return (
             <div style={contentHolder}>
-                {sectorType === 'street' && <BuyButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                {sectorType === 'street' && <BuyButton sectorWidth={sectorWidth} sectorHeight={sectorHeight} scale={scale}
                     active={(actionMoveBuy || actionMoveUpgrade) && currentPlayer === getNickname()}
                     clickAction={actionMoveBuy === true ? () => {buyField()} : () => {upgradeField(sectorId)}}>
                 </BuyButton> }
@@ -122,14 +122,14 @@ class SectorCard extends React.Component {
                                 </div>
                             </div>
                             {(sectorType === 'street' || sectorType === 'prison') &&
-                                <div style={descriptionContainerStyle}> <Description fieldType={sectorType} buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
+                                <div style={descriptionContainerStyle}> <Description scale={scale} fieldType={sectorType} buyPrice={buyPrice} fees={fees} sellPrice={sellPrice} upgradePrice={upgradePrice} fieldLevel={fieldLevel}></Description> </div>}
                         </div>
                     </div>
                     {actionMovePay === true && currentPlayer === getNickname() &&
-                        <PayButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                        <PayButton sectorWidth={sectorWidth} sectorHeight={sectorHeight} scale = {scale}
                                    clickAction={() => {payField()}} payButtonText={sectorType === 'street' ? 'Pay Rent' : sectorType === 'prison' ? 'Pay to Escape' : 'undefined'}/>}
                 </div>
-                {sectorType === 'street' && <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                {sectorType === 'street' && <SellButton sectorWidth={sectorWidth} sectorHeight={sectorHeight} scale={scale}
                             active={(actionMoveSell) && currentPlayer === getNickname()}
                             clickAction={actionMoveSell === true ? () => {sellField(sectorId)} : null}>
                 </SellButton>}

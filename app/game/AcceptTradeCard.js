@@ -10,7 +10,7 @@ import AcceptTradeDescription from "./AcceptTradeDescription";
 class SectorCard extends React.Component {
 
     render() {
-        const { sectorColor, sectorName, sectorWidth, sectorHeight, onTrade, currentPlayer, buyPrice, playersMoney, fieldOwners, tradeInfo, currentPlayerIndex, sendAccept
+        const { sectorColor, sectorName, scale, sectorWidth, sectorHeight, onTrade, currentPlayer, buyPrice, playersMoney, fieldOwners, tradeInfo, currentPlayerIndex, sendAccept
         } = this.props;
 
         const contentHolder = {
@@ -43,18 +43,18 @@ class SectorCard extends React.Component {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: '2',
-            boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
+            boxShadow: `rgba(0, 0, 0, 0.19) 0px ${scale * 10}px ${scale * 20}px, rgba(0, 0, 0, 0.23) 0px ${scale * 6}px ${scale * 6}px`,
         };
 
         const insideCard = {
             width: "85%",
             height: "90%",
-            paddingLeft: "3px",
-            paddingRight: "3px",
+            paddingLeft: `${scale * 3}px`,
+            paddingRight: `${scale * 3}px`,
             backgroundColor: 'white',
             display: 'flex',
             flexDirection: 'column',
-            paddingTop: "7px",
+            paddingTop: `${scale * 7}px`,
             justifyContent: 'space-between',
             borderTopRightRadius: '8%',
             borderTopLeftRadius: '8%',
@@ -77,10 +77,10 @@ class SectorCard extends React.Component {
             alignItems: 'center',
             width: "93%",
             height: "20%",
-            borderTopRightRadius: '15px',
-            borderTopLeftRadius: '15px',
-            borderBottomLeftRadius: '15px',
-            borderBottomRightRadius: '15px',
+            borderTopRightRadius: `${scale * 15}px`,
+            borderTopLeftRadius: `${scale * 15}px`,
+            borderBottomLeftRadius: `${scale * 15}px`,
+            borderBottomRightRadius: `${scale * 15}px`,
             backgroundColor: sectorColor, //change to actual color
         }
 
@@ -110,17 +110,17 @@ class SectorCard extends React.Component {
                                 </div>
                             </div>
                             {sectorName !== "Start" &&
-                                <div style={descriptionContainerStyle}> <TradeDescription yourCost={yourCost} hisCost={hisCost}></TradeDescription> </div>}
+                                <div style={descriptionContainerStyle}> <TradeDescription scale={scale} yourCost={yourCost} hisCost={hisCost}></TradeDescription> </div>}
                             {sectorName !== "Start" &&
-                                <div style={descriptionContainerStyle}> <AcceptTradeDescription amount1={tradeInfo.money1} amount2={tradeInfo.money2}></AcceptTradeDescription> </div>}
+                                <div style={descriptionContainerStyle}> <AcceptTradeDescription scale={scale} amount1={tradeInfo.money1} amount2={tradeInfo.money2}></AcceptTradeDescription> </div>}
                         </div>
                     </div>
-                        <TradeButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                        <TradeButton sectorWidth={sectorWidth} sectorHeight={sectorHeight} scale={scale}
                                    clickAction={() => {
                                        console.log("HERE")
                                        sendAccept(tradeInfo, true)
                                    }}/>
-                        <RejectTradeButton sectorWidth={sectorWidth} sectorHeight={sectorHeight}
+                        <RejectTradeButton sectorWidth={sectorWidth} sectorHeight={sectorHeight} scale={scale}
                                  clickAction={() => {
                                      sendAccept(tradeInfo, false)
                                  }}/>

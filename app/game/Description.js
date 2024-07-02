@@ -4,12 +4,13 @@ import '../font.css';
 class Description extends React.Component {
 
     render() {
-        const { fieldType, buyPrice, fees, sellPrice, upgradePrice, fieldLevel } = this.props;
+        const { fieldType, buyPrice, fees, scale, sellPrice, upgradePrice, fieldLevel } = this.props;
 
         const descriptionStyle = {
             fontFamily: "'Aller', sans-serif",
-            marginLeft: '5px',
-            marginRight: '5px',
+            fontSize: `${scale * 20}px`,
+            marginLeft: `${scale * 5}px`,
+            marginRight: `${scale * 5}px`,
         };
 
         const centeredText = {
@@ -35,7 +36,7 @@ class Description extends React.Component {
 
         if(fieldType === 'street') {
             return (
-                <div className="description" style={{width: '100%'}}>
+                <div className="description" style={{width: '100%', fontsize: `${20 * scale}px`}}>
                     <div style={levelStyles(0)}>
                         <div style={centeredText}>RENT: ${fees[0]}</div>
                     </div>
@@ -60,7 +61,7 @@ class Description extends React.Component {
                 <div className="description" style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    marginBottom: `10px`,
+                    marginBottom: `${scale * 10}px`,
                 }}>
                     <div style={descriptionStyle}>
                         <div style={centeredText}>Price to Escape: {buyPrice}$</div>
