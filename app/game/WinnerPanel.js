@@ -1,15 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const WinnerPanel = ({ winner, lost }) => {
+const WinnerPanel = ({ winner, lost, scale }) => {
     if (!winner) return null;
 
     return (
         <View style={styles.overlay}>
-            <View style={styles.panel}>
-                {lost === false && <Text style={styles.winnerText}>Congratulations! You Win</Text> }
-                {lost === true && <Text style={styles.winnerText}>You Lost!</Text> }
-                <Text style={styles.winnerText}>{winner} has won the game!</Text>
+            <View style={[styles.panel, {padding: 30 * scale, borderRadius: 10 * scale}]}>
+                {lost === false && <Text style={[styles.winnerText, {fontSize: 24 * scale, marginBottom: 10 * scale}]}>Congratulations! You Win</Text> }
+                {lost === true && <Text style={[styles.winnerText, {fontSize: 24 * scale, marginBottom: 10 * scale}]}>You Lost!</Text> }
+                <Text style={[styles.winnerText, {fontSize: 24 * scale, marginBottom: 10 * scale}]}>{winner} has won the game!</Text>
             </View>
         </View>
     );
@@ -28,9 +28,7 @@ const styles = StyleSheet.create({
         zIndex: 1000,
     },
     panel: {
-        padding: 30,
         backgroundColor: 'white',
-        borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
@@ -39,9 +37,7 @@ const styles = StyleSheet.create({
     },
     winnerText: {
         fontFamily: "'Aller', sans-serif",
-        fontSize: 24,
         textAlign: 'center',
-        marginBottom: 10,
     },
 });
 

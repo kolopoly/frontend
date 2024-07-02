@@ -6,7 +6,7 @@ import PanelButtons from "./Buttons/PanelButtons";
 import {getNickname} from "../storage";
 import StartTradeButton from "./Buttons/StartTradeButton";
 
-const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar, width, height, currentPlayer, showTradeButton, gameStarted, onTrade, tradeInfo, playerIndex, currentPlayerIndex}) => {
+const PlayersPanel = ({ playersNumber, scale, playersMoney, playersName, playersAvatar, width, height, currentPlayer, showTradeButton, gameStarted, onTrade, tradeInfo, playerIndex, currentPlayerIndex}) => {
     const playersColors = ['blue', 'red', 'green', 'yellow'];
     const playersDefaultAvatars = [
         require('../../assets/defaultAvatars/icon0005.png'),
@@ -20,9 +20,9 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
         width: width * 0.9,
         height: height,
         backgroundColor: 'rgba(212,240,217,255)',
-        borderBottomLeftRadius: '25px',
-        borderTopLeftRadius: '25px',
-        padding: '5px',
+        borderBottomLeftRadius: `${scale * 25}px`,
+        borderTopLeftRadius: `${scale * 25}px`,
+        padding: `${scale * 5}px`,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -39,7 +39,7 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
 
     const elementsStyle = {
         fontFamily: "'Aller', sans-serif",
-        padding: '5px',
+        padding: `${scale * 5}px`,
         fontSize: width * 0.05,
     };
 
@@ -49,10 +49,10 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
         justifyContent: 'center',
         width: '35%', // Adjust width as needed
         height: '90%',
-        borderBottomRightRadius: '25px',
-        borderBottomLeftRadius: '25px',
-        borderTopRightRadius: '25px',
-        borderTopLeftRadius: '25px',
+        borderBottomRightRadius: `${scale * 25}px`,
+        borderBottomLeftRadius: `${scale * 25}px`,
+        borderTopRightRadius: `${scale * 25}px`,
+        borderTopLeftRadius: `${scale * 25}px`,
         marginLeft: width * 0.03,
     };
 
@@ -62,7 +62,7 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
         justifyContent: 'space-between',
         width: '100%',
         height: '100%',
-        paddingLeft: '10px'
+        paddingLeft: `${scale * 10}px`
     };
 
     const detailsTopStyle = {
@@ -85,9 +85,10 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
     };
 
     const defaultAvatarStyle = {
-        marginLeft: '15px',
-        marginTop: '3px',
-
+        marginLeft: `${scale * 15}px`,
+        marginTop: `${scale * 3}px`,
+        width: 120 * scale,
+        height: 120 * scale,
     }
 
     const wholeContainer = {
@@ -121,6 +122,7 @@ const PlayersPanel = ({ playersNumber, playersMoney, playersName, playersAvatar,
             {gameStarted === true && playersName[playerIndex] !== getNickname() &&
             <StartTradeButton buttonWidth={width}
                               buttonHeight={height}
+                              scale={scale}
                               active={showTradeButton && currentPlayer === getNickname()}
                               clickAction={() => {tradeInfo.clicked === true ? onTrade({clicked: false,
                                       with: 0,

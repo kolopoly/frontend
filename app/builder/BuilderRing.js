@@ -10,7 +10,7 @@ import SaveButton from "./SaveButton";
 import {backend, wsbackend} from "../backend";
 import {getNickname} from "../storage";
 
-const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSectorProperty, numSectors, setValue}) => {
+const BuilderRing = ({ radius, sectorProperties, scale, setSectorProperties, updateSectorProperty, numSectors, setValue}) => {
     const [selectedSector, setSelectedSector] = useState(null);
     const newRadius = radius;
     const sectorAngle = 360 / numSectors;
@@ -55,7 +55,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
             borderTop: `${sectorHeight * 0.05}px solid rgba(136,171,150,255)`,
             borderBottom: `${sectorHeight * 0.2}px solid ${prop[i].color}`,
             textAlign: 'center',
-            lineHeight: '30px',
+            lineHeight: `${30 * scale}px`,
             cursor: 'pointer',
             clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)'
         };
@@ -72,7 +72,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
                 transform: 'translateX(-50%)',
                 width: `${sectorWidth}px`,
                 height: `${sectorHeight}px`,
-                lineHeight: '30px',
+                lineHeight: `${30 * scale}px`,
                 clipPath: 'polygon(0% 0%, 100% 0%, 75% 100%, 25% 100%)',
                 border: '4px solid white',
                 backgroundColor: 'rgb(255,255,255,0.8)',
@@ -103,7 +103,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
                             transform: 'translate(-50%, 0)',
                             textAlign: 'center',
                             fontSize: '90%',
-                            lineHeight: '15px',
+                            lineHeight: `${15 * scale}px`,
                             marginTop: `${sectorHeight * 0.5}px`,
                             backgroundColor: 'rgba(255, 255, 255, 0)', // Optional: Set a background color if needed to cover the border
                             zIndex: '10' // Ensure the zIndex is higher than the button's border
@@ -192,6 +192,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
             <div className="ring-field" style={ringStyle}>
                 {selectedSector !== null && (
                     <SectorCard
+                        scale={scale}
                         sectorColor={'green'}
                         sectorName={'AA'}
                         sectorWidth={radius - sectorHeight * 1.15}
@@ -203,7 +204,7 @@ const BuilderRing = ({ radius, sectorProperties, setSectorProperties, updateSect
                 )}
                 {sectorButtons}
             </div>
-            <SaveButton sectorWidth={100} sectorHeight={100} clickAction={validateAndSave}/>
+            <SaveButton sectorWidth={100 * scale} sectorHeight={100 * scale} scale={scale} clickAction={validateAndSave}/>
             <ToastContainer/>
         </div>
     );

@@ -5,29 +5,34 @@ import {
     View,
     TouchableOpacity,
     ImageBackground,
-    Image
+    Image, Dimensions
 } from 'react-native';
 const localImage = require('../assets/MainBackground.jpeg');
 const gifImage = require('../assets/giphy.gif');
 
-const MainScreen = () => (
-    <View style={styles.container}>
+let widthGlobal = window.innerWidth
+let heightGlobal = window.innerHeight
+
+const MainScreen = ({width, height, scale}) => {
+    console.log(width, height)
+    return (
+    <View style={[styles.container, {width, height}]} >
         <ImageBackground
             source={localImage}
-            style={styles.image}
-            blurRadius={5}
+            style={[styles.image]}
+            blurRadius={5 * scale}
             resizeMode="stretch"
         >
             <View style={styles.contentContainer}>
                 <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.button} href="/game">
-                        <Text style={styles.buttonText}>Games</Text>
+                    <TouchableOpacity style={[styles.button, {borderRadius: 20 * scale, paddingVertical: 20 * scale, paddingHorizontal: 20 * scale, marginVertical: 20 * scale}]} href="/game">
+                        <Text style={[styles.buttonText, {fontSize: 20 * scale}]}>Games</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} href="/builder">
-                        <Text style={styles.buttonText}>Builder</Text>
+                    <TouchableOpacity style={[styles.button, {borderRadius: 20 * scale, paddingVertical: 20 * scale, paddingHorizontal: 20 * scale, marginVertical: 20 * scale}]} href="/builder">
+                        <Text style={[styles.buttonText,{fontSize: 20 * scale}]}>Builder</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} href="/about">
-                        <Text style={styles.buttonText}>About</Text>
+                    <TouchableOpacity style={[styles.button, {borderRadius: 20 * scale, paddingVertical: 20 * scale, paddingHorizontal: 20 * scale, marginVertical: 20 * scale}]} href="/about">
+                        <Text style={[styles.buttonText, {fontSize: 20 * scale}]}>About</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.gifContainer}>
@@ -39,8 +44,8 @@ const MainScreen = () => (
                 </View>
             </View>
         </ImageBackground>
-    </View>
-);
+    </View>);
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -48,8 +53,8 @@ const styles = StyleSheet.create({
         backgroundPosition: 'center',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        width: '100vw',
-        height: '100vh'
+        width: `${widthGlobal}px`,
+        height: `${heightGlobal}px`,
     },
     image: {
         flex: 1,
@@ -73,14 +78,9 @@ const styles = StyleSheet.create({
     button: {
         justifyContent: "center",
         backgroundColor: "#007bff",
-        borderRadius: 20,
-        paddingVertical: 20,
-        paddingHorizontal: 45,
-        marginVertical: 10,
         width: '40%'
     },
     buttonText: {
-        fontSize: 20,
         color: "#fff",
         textAlign: 'center',
     },
