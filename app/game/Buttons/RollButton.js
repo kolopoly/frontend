@@ -16,8 +16,8 @@ const RollButton = ({ buttonWidth, scale,  buttonHeight, active, clickAction, di
 
     const rotationOne = useRef(new Animated.Value(0)).current;
     const rotationTwo = useRef(new Animated.Value(0)).current;
-    const positionOne = useRef(new Animated.ValueXY({ x: 50 * scale, y: 0 })).current;
-    const positionTwo = useRef(new Animated.ValueXY({ x: -50 * scale, y: 0 })).current;
+    const positionOne = new Animated.ValueXY({ x: 50 * scale, y: 0 });
+    const positionTwo = new Animated.ValueXY({ x: -50 * scale, y: 0 });
     const [currentDiceOne, setCurrentDiceOne] = useState(diceOne);
     const [currentDiceTwo, setCurrentDiceTwo] = useState(diceTwo);
 
