@@ -288,12 +288,13 @@ const GameScreen = ({width, height, scale}) => {
     const [message, setMessages] = useState(null);
     const [socket, setSocket] = useState(null);
     const [socketID, setSocketID] = useState(0);
+    const [retr, setRetr] = useState(0);
 
     useEffect(() => {
         if(state.isGameStarted && state.game_id !== socketID) {
             setSocketID(state.game_id)
             const ws = new WebSocket(`${wsbackend}/connect/${getNickname()}/${state.game_id}`);
-
+            console.log("reconnect")
             ws.onopen = () => {
                 console.log('WebSocket connected');
             };
@@ -325,10 +326,20 @@ const GameScreen = ({width, height, scale}) => {
 
             ws.onclose = () => {
                 console.log('WebSocket closed');
+                if(state.isGameStarted && state.game_id !== socketID) {
+                    setSocketID(0)
+                    setRetr(retr + 1)
+                    console.error('Retry to connect:', retr);
+                }
             };
 
             ws.onerror = (error) => {
                 console.error('WebSocket error:', error);
+                if(state.isGameStarted && state.game_id !== socketID) {
+                    setSocketID(0)
+                    setRetr(retr + 1)
+                    console.error('Retry to connect:', retr);
+                }
             };
 
             setSocket(ws);
@@ -337,7 +348,7 @@ const GameScreen = ({width, height, scale}) => {
                 //ws.close();
             };
         }
-    }, [state]);
+    }, [state, retr]);
 
     const startGame = async () => {
         console.log("Game ID:", text);
