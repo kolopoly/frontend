@@ -5,7 +5,7 @@ export default function Index() {
     const [windowSize, setWindowSize] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
-        scale: window.innerWidth / 1728,
+        scale: Math.min(window.innerWidth / 1728, window.innerHeight / 959)
     });
 
     useEffect(() => {
