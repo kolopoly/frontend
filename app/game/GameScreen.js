@@ -474,7 +474,7 @@ const GameScreen = ({width, height, scale}) => {
                     </View>
                     <View style={styles.rightContainer}>
                         {state.isGameStartedByHost && <GameRing
-                            radius={Math.min(width, height) * 0.4}
+                            radius={Math.min(width, height) * 0.35}
                             scale={scale}
                             numSectors={state.field_number}
                             playersNumber={info.players.length}

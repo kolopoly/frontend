@@ -13,8 +13,8 @@ export default function Index() {
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
-                // scale: Math.min(window.innerWidth / 1728, window.innerHeight / 959)
-                scale: window.innerWidth / 1728,
+                scale: Math.min(window.innerWidth / 1728, window.innerHeight / 959)
+                // scale: window.innerWidth / 1728,
             });
         };
 
